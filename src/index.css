@@ -1,0 +1,365 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap");
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  color: #0f172a;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* =========================================
+   HERO KEYFRAME ANIMATIONS
+   ========================================= */
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes floatYAlt {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  40% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+  70% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+}
+
+@keyframes blobMove {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(20px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-15px, 15px) scale(0.97);
+  }
+}
+
+@keyframes blobMoveAlt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-20px, 20px) scale(1.05);
+  }
+  66% {
+    transform: translate(15px, -10px) scale(0.97);
+  }
+}
+
+@keyframes pulseRing {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.15;
+  }
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dashFlow {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drawBar {
+  from {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+/* =========================================
+   ANIMATION UTILITY CLASSES
+   ========================================= */
+
+/* Fade up with stagger delays */
+.anim-fade-up {
+  animation: fadeSlideUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-d0 {
+  animation-delay: 0ms;
+}
+.anim-d1 {
+  animation-delay: 80ms;
+}
+.anim-d2 {
+  animation-delay: 160ms;
+}
+.anim-d3 {
+  animation-delay: 260ms;
+}
+.anim-d4 {
+  animation-delay: 360ms;
+}
+.anim-d5 {
+  animation-delay: 480ms;
+}
+
+/* Slide in from right */
+.anim-fade-right {
+  animation: fadeSlideInRight 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+/* Scale fade */
+.anim-scale-in {
+  animation: scaleFadeIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Floating cards */
+.animate-float {
+  animation: floatY 5s ease-in-out infinite;
+}
+.animate-float-alt {
+  animation: floatYAlt 6.5s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: floatY 8s ease-in-out infinite 1s;
+}
+.animate-float-d1 {
+  animation-delay: 0.8s;
+}
+.animate-float-d2 {
+  animation-delay: 1.6s;
+}
+.animate-float-d3 {
+  animation-delay: 2.4s;
+}
+
+/* Background blobs */
+.animate-blob {
+  animation: blobMove 12s ease-in-out infinite;
+}
+.animate-blob-alt {
+  animation: blobMoveAlt 14s ease-in-out infinite 2s;
+}
+
+/* Pulse rings */
+.animate-pulse-ring {
+  animation: pulseRing 3s ease-in-out infinite;
+}
+
+/* =========================================
+   SWIPER HERO OVERRIDES
+   ========================================= */
+
+.hero-swiper {
+  width: 100%;
+}
+
+.hero-swiper .swiper-slide {
+  overflow: hidden;
+}
+
+/* Pagination dots */
+.hero-swiper .swiper-pagination {
+  bottom: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.hero-swiper .swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  background: #94a3b8 !important;
+  opacity: 1 !important;
+  border-radius: 9999px !important;
+  margin: 0 !important;
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  background: #1d4ed8 !important;
+  width: 28px !important;
+  border-radius: 4px !important;
+}
+
+/* Hide default Swiper nav arrows */
+.hero-swiper .swiper-button-next,
+.hero-swiper .swiper-button-prev {
+  display: none !important;
+}
+
+/* =========================================
+   UTILITY EXTRAS
+   ========================================= */
+
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Line-clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================================
+   TESTIMONIALS SWIPER OVERRIDES & SIDE PREVIEW CARDS
+   ========================================= */
+
+.testimonials-swiper {
+  overflow: visible !important;
+}
+
+.testimonials-swiper .swiper-slide {
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
+
+/* Side preview cards (inactive slides) */
+.testimonials-swiper .swiper-slide:not(.swiper-slide-active) {
+  opacity: 0.55 !important;
+  filter: blur(1.5px) grayscale(15%);
+  pointer-events: none;
+}
+
+.testimonials-swiper .swiper-slide-active {
+  opacity: 1 !important;
+  filter: blur(0px) grayscale(0%);
+  z-index: 30;
+  pointer-events: auto;
+}
+
+/* Custom animated pagination bullets (capsules) */
+.testimonials-pagination .testimonials-bullet {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.testimonials-pagination .testimonials-bullet:hover {
+  background-color: #94a3b8;
+  transform: scale(1.15);
+}
+
+.testimonials-pagination .testimonials-bullet-active {
+  width: 32px;
+  height: 10px;
+  background: linear-gradient(90deg, #3695d0 0%, #4f46e5 100%);
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

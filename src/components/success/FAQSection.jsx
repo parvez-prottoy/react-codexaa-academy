@@ -1,0 +1,87 @@
+import { useState } from "react";
+import { HiPlus, HiMinus, HiQuestionMarkCircle } from "react-icons/hi2";
+import { successFaqs } from "../../data/successStoriesData";
+
+export default function FAQSection() {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex((prev) => (prev === index ? -1 : index));
+  };
+
+  return (
+    <section className="py-16 sm:py-20 lg:py-24 bg-slate-50/50 border-b border-slate-100">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center space-y-4 mb-12 sm:mb-14">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-xs font-semibold text-[#2470A8]">
+            <HiQuestionMarkCircle size={16} className="text-[#3695d0]" />
+            <span>Placement & Career FAQs</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Frequently Asked Questions
+          </h2>
+
+          <p className="text-base sm:text-lg text-slate-600 font-normal max-w-xl mx-auto">
+            Everything you need to know about our career outcomes and placement support.
+          </p>
+        </div>
+
+        {/* FAQ List */}
+        <div className="space-y-4">
+          {successFaqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <div
+                key={faq.id}
+                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                  isOpen
+                    ? "bg-white border-blue-300/80 shadow-md shadow-blue-900/5"
+                    : "bg-white border-slate-200/80 hover:border-slate-300 shadow-xs"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFAQ(index)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${faq.id}`}
+                  className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                >
+                  <span className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                    {faq.question}
+                  </span>
+
+                  <span
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                      isOpen
+                        ? "bg-[#2470A8] text-white rotate-180"
+                        : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                    }`}
+                  >
+                    {isOpen ? <HiMinus size={18} /> : <HiPlus size={18} />}
+                  </span>
+                </button>
+
+                {/* Animated Drawer */}
+                <div
+                  id={`faq-answer-${faq.id}`}
+                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 pt-0 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100/80">
+                      <p className="pt-3">{faq.answer}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

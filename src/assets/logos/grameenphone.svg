@@ -1,0 +1,11 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(10, 0)">
+    <!-- GP Swoosh Mark -->
+    <g transform="translate(12, 26)">
+      <path d="M 6 24 C 2 14 8 4 20 2 C 12 7 11 16 16 21 C 19 24 13 25 6 24 Z" fill="#0B8E4F" />
+      <path d="M 20 2 C 27 7 26 19 18 26 C 20 18 16 11 9 7 C 12 3 17 2 20 2 Z" fill="#0B8E4F" opacity="0.8" />
+    </g>
+    <!-- Text -->
+    <text x="44" y="40" dominant-baseline="central" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="bold" fill="#0B8E4F">grameenphone</text>
+  </g>
+</svg>
