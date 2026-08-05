@@ -1,13 +1,14 @@
 import {
-  HiLightBulb,
   HiArrowRight,
   HiCheckCircle,
+  HiLightBulb,
   HiSparkles,
-} from "react-icons/hi2";
-import useInView from "../../hooks/useInView";
-import { crossFeatures } from "../../data/technologyData";
-import FeatureCard from "./FeatureCard";
-import TechnologyHub from "./TechnologyHub";
+} from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
+import { crossFeatures } from '../../data/technologyData';
+import useInView from '../../hooks/useInView';
+import FeatureCard from './FeatureCard';
+import TechnologyHub from './TechnologyHub';
 
 /* ─── Background Layer ─── */
 function SectionBackground() {
@@ -23,15 +24,15 @@ function SectionBackground() {
       <div
         className="absolute -top-32 -left-32 w-130 h-130 rounded-full opacity-25 animate-blob"
         style={{
-          background: "radial-gradient(circle, #bae6fd 0%, transparent 70%)",
-          filter: "blur(80px)",
+          background: 'radial-gradient(circle, #bae6fd 0%, transparent 70%)',
+          filter: 'blur(80px)',
         }}
       />
       <div
         className="absolute -bottom-32 -right-32 w-120 h-120 rounded-full opacity-20 animate-blob-alt"
         style={{
-          background: "radial-gradient(circle, #c7d2fe 0%, transparent 70%)",
-          filter: "blur(70px)",
+          background: 'radial-gradient(circle, #c7d2fe 0%, transparent 70%)',
+          filter: 'blur(70px)',
         }}
       />
 
@@ -85,13 +86,13 @@ export default function CrossPlatformSection() {
               className="transition-all duration-700 mb-4 sm:mb-5"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(20px)",
+                transform: headerInView ? 'translateY(0)' : 'translateY(20px)',
               }}
             >
               <span
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold
                            border border-blue-100 text-[#2470A8] shadow-xs"
-                style={{ backgroundColor: "#f0f9ff" }}
+                style={{ backgroundColor: '#f0f9ff' }}
               >
                 <HiLightBulb size={16} />
                 Learn Modern Technologies
@@ -103,18 +104,18 @@ export default function CrossPlatformSection() {
               className="transition-all duration-700 mb-4 sm:mb-5"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(20px)",
-                transitionDelay: "100ms",
+                transform: headerInView ? 'translateY(0)' : 'translateY(20px)',
+                transitionDelay: '100ms',
               }}
             >
               <h2
                 id="cross-platform-heading"
                 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight text-slate-900 leading-tight"
               >
-                Master{" "}
+                Master{' '}
                 <span className="text-transparent bg-clip-text bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]">
                   Multiple Technologies
-                </span>{" "}
+                </span>{' '}
                 with One Learning Journey
               </h2>
             </div>
@@ -124,8 +125,8 @@ export default function CrossPlatformSection() {
               className="transition-all duration-700 mb-8 sm:mb-10"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(20px)",
-                transitionDelay: "200ms",
+                transform: headerInView ? 'translateY(0)' : 'translateY(20px)',
+                transitionDelay: '200ms',
               }}
             >
               <p className="text-base sm:text-lg text-slate-500 leading-relaxed max-w-2xl">
@@ -140,8 +141,8 @@ export default function CrossPlatformSection() {
               className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-8 sm:mb-10 transition-all duration-700"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(24px)",
-                transitionDelay: "300ms",
+                transform: headerInView ? 'translateY(0)' : 'translateY(24px)',
+                transitionDelay: '300ms',
               }}
             >
               {crossFeatures.map((feature) => (
@@ -154,12 +155,12 @@ export default function CrossPlatformSection() {
               className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 w-full mb-6 transition-all duration-700"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(24px)",
-                transitionDelay: "400ms",
+                transform: headerInView ? 'translateY(0)' : 'translateY(24px)',
+                transitionDelay: '400ms',
               }}
             >
-              <a
-                href="/enroll"
+              <Link
+                to="/contact"
                 className="group inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full
                            bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8] text-white text-base font-bold
                            shadow-lg shadow-blue-200 hover:shadow-xl hover:shadow-blue-300
@@ -171,7 +172,7 @@ export default function CrossPlatformSection() {
                   size={18}
                   className="group-hover:translate-x-1 transition-transform duration-200"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Trust Metrics Bar */}
@@ -179,8 +180,8 @@ export default function CrossPlatformSection() {
               className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-500 font-medium pt-2 transition-all duration-700"
               style={{
                 opacity: headerInView ? 1 : 0,
-                transform: headerInView ? "translateY(0)" : "translateY(24px)",
-                transitionDelay: "480ms",
+                transform: headerInView ? 'translateY(0)' : 'translateY(24px)',
+                transitionDelay: '480ms',
               }}
             >
               <div className="flex items-center gap-1">

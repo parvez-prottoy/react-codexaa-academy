@@ -189,7 +189,7 @@ export default function Navbar() {
         </span>
         <span className="text-blue-200">·</span>
         <Link
-          to="/enroll"
+          to="/contact"
           className="underline underline-offset-2 hover:text-blue-100 transition-colors duration-150 font-semibold"
         >
           Apply Now →

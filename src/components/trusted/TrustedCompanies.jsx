@@ -1,5 +1,6 @@
 import {} from 'react';
 import { HiArrowRight, HiHandRaised } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
 import { companies, sectionStats } from '../../data/companyData';
 import useInView from '../../hooks/useInView';
 import CompanyCard from './CompanyCard';
@@ -222,8 +223,8 @@ export default function TrustedCompanies() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
-            <a
-              href="/enroll"
+            <Link
+              to="/contact"
               className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
                          bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8] text-white text-sm font-bold
                          shadow-lg shadow-blue-200 hover:shadow-xl hover:shadow-blue-300
@@ -236,9 +237,9 @@ export default function TrustedCompanies() {
                 size={16}
                 className="group-hover:translate-x-1 transition-transform duration-200"
               />
-            </a>
-            <a
-              href="/courses"
+            </Link>
+            <Link
+              to="/courses"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full
                          border-2 border-slate-200 text-slate-700 text-sm font-semibold
                          hover:border-blue-300 hover:text-[#2B7CAD] hover:bg-blue-50/50
@@ -247,7 +248,7 @@ export default function TrustedCompanies() {
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
             >
               Explore Courses
-            </a>
+            </Link>
           </div>
         </div>
       </div>

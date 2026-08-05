@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { HiArrowRight, HiSparkles } from "react-icons/hi2";
+import { useState } from 'react';
+import { HiArrowRight, HiSparkles } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
 
 /* ─── Floating decoration bubble ─── */
 function Bubble({ className, style }) {
@@ -25,40 +26,40 @@ export default function FooterCTA() {
         className="relative overflow-hidden rounded-3xl px-6 py-12 sm:px-12 sm:py-16 lg:px-16"
         style={{
           background:
-            "linear-gradient(135deg, #5BAFE6 0%, #3695D0 40%, #2470A8 70%, #2470A8 100%)",
+            'linear-gradient(135deg, #5BAFE6 0%, #3695D0 40%, #2470A8 70%, #2470A8 100%)',
           boxShadow:
-            "0 32px 80px rgba(37,99,235,0.35), 0 8px 32px rgba(37,99,235,0.2)",
+            '0 32px 80px rgba(37,99,235,0.35), 0 8px 32px rgba(37,99,235,0.2)',
         }}
       >
         {/* ── Decorative blurred blobs ── */}
         <Bubble
           className="w-72 h-72 animate-blob"
           style={{
-            top: "-60px",
-            right: "5%",
+            top: '-60px',
+            right: '5%',
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.5) 0%, transparent 70%)",
-            filter: "blur(60px)",
+              'radial-gradient(circle, rgba(99,102,241,0.5) 0%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
         />
         <Bubble
           className="w-56 h-56 animate-blob-alt"
           style={{
-            bottom: "-40px",
-            left: "8%",
+            bottom: '-40px',
+            left: '8%',
             background:
-              "radial-gradient(circle, rgba(96,165,250,0.45) 0%, transparent 70%)",
-            filter: "blur(50px)",
+              'radial-gradient(circle, rgba(96,165,250,0.45) 0%, transparent 70%)',
+            filter: 'blur(50px)',
           }}
         />
         <Bubble
           className="w-40 h-40"
           style={{
-            top: "20%",
-            left: "40%",
+            top: '20%',
+            left: '40%',
             background:
-              "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
-            filter: "blur(30px)",
+              'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+            filter: 'blur(30px)',
           }}
         />
 
@@ -107,12 +108,12 @@ export default function FooterCTA() {
             </span>
 
             <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-white leading-[1.15] tracking-tight">
-              Ready to Start Your{" "}
+              Ready to Start Your{' '}
               <span
                 className="relative inline-block"
                 style={{
-                  WebkitTextStroke: "1px rgba(255,255,255,0.3)",
-                  textShadow: "0 0 40px rgba(255,255,255,0.3)",
+                  WebkitTextStroke: '1px rgba(255,255,255,0.3)',
+                  textShadow: '0 0 40px rgba(255,255,255,0.3)',
                 }}
               >
                 Tech Career?
@@ -127,9 +128,9 @@ export default function FooterCTA() {
             {/* Proof pills */}
             <div className="flex flex-wrap gap-3 mt-5">
               {[
-                { emoji: "👩‍💻", text: "15,000+ Students" },
-                { emoji: "🏆", text: "98% Satisfaction" },
-                { emoji: "💼", text: "500+ Alumni Hired" },
+                { emoji: '👩‍💻', text: '15,000+ Students' },
+                { emoji: '🏆', text: '98% Satisfaction' },
+                { emoji: '💼', text: '500+ Alumni Hired' },
               ].map((item) => (
                 <span
                   key={item.text}
@@ -146,18 +147,18 @@ export default function FooterCTA() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center gap-3 shrink-0">
             {/* Primary */}
-            <a
-              href="/enroll"
+            <Link
+              to="/contact"
               className="group inline-flex items-center justify-center gap-2 px-7 py-3.5
                          rounded-full font-bold text-base transition-all duration-300
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700"
               style={{
-                background: "white",
-                color: primaryHover ? "#1d4ed8" : "#1e3a6e",
+                background: 'white',
+                color: primaryHover ? '#1d4ed8' : '#1e3a6e',
                 boxShadow: primaryHover
-                  ? "0 16px 40px rgba(255,255,255,0.35)"
-                  : "0 6px 20px rgba(255,255,255,0.2)",
-                transform: primaryHover ? "translateY(-3px)" : "translateY(0)",
+                  ? '0 16px 40px rgba(255,255,255,0.35)'
+                  : '0 6px 20px rgba(255,255,255,0.2)',
+                transform: primaryHover ? 'translateY(-3px)' : 'translateY(0)',
               }}
               onMouseEnter={() => setPrimaryHover(true)}
               onMouseLeave={() => setPrimaryHover(false)}
@@ -168,10 +169,10 @@ export default function FooterCTA() {
                 aria-hidden="true"
                 className="transition-transform duration-300"
                 style={{
-                  transform: primaryHover ? "translateX(4px)" : "translateX(0)",
+                  transform: primaryHover ? 'translateX(4px)' : 'translateX(0)',
                 }}
               />
-            </a>
+            </Link>
 
             {/* Secondary */}
             <a
@@ -180,16 +181,16 @@ export default function FooterCTA() {
                          rounded-full font-semibold text-base transition-all duration-300
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700"
               style={{
-                background: "rgba(255,255,255,0.12)",
-                color: "white",
-                border: "1.5px solid rgba(255,255,255,0.3)",
-                backdropFilter: "blur(8px)",
+                background: 'rgba(255,255,255,0.12)',
+                color: 'white',
+                border: '1.5px solid rgba(255,255,255,0.3)',
+                backdropFilter: 'blur(8px)',
                 boxShadow: secondaryHover
-                  ? "0 8px 24px rgba(255,255,255,0.15)"
-                  : "none",
+                  ? '0 8px 24px rgba(255,255,255,0.15)'
+                  : 'none',
                 transform: secondaryHover
-                  ? "translateY(-3px)"
-                  : "translateY(0)",
+                  ? 'translateY(-3px)'
+                  : 'translateY(0)',
               }}
               onMouseEnter={() => setSecondaryHover(true)}
               onMouseLeave={() => setSecondaryHover(false)}

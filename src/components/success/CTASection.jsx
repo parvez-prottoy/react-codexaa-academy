@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { HiArrowRight, HiSparkles } from "react-icons/hi2";
+import { HiArrowRight, HiSparkles } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
 
 export default function CTASection() {
   return (
@@ -9,9 +9,9 @@ export default function CTASection() {
           className="relative overflow-hidden rounded-3xl px-6 py-12 sm:px-12 sm:py-16 lg:px-16"
           style={{
             background:
-              "linear-gradient(135deg, #5BAFE6 0%, #3695D0 40%, #2470A8 70%, #2470A8 100%)",
+              'linear-gradient(135deg, #5BAFE6 0%, #3695D0 40%, #2470A8 70%, #2470A8 100%)',
             boxShadow:
-              "0 32px 80px rgba(37,99,235,0.35), 0 8px 32px rgba(37,99,235,0.2)",
+              '0 32px 80px rgba(37,99,235,0.35), 0 8px 32px rgba(37,99,235,0.2)',
           }}
         >
           {/* Decorative blurred blobs */}
@@ -19,16 +19,16 @@ export default function CTASection() {
             className="absolute w-72 h-72 rounded-full pointer-events-none animate-blob -top-15 right-[5%]"
             style={{
               background:
-                "radial-gradient(circle, rgba(99,102,241,0.5) 0%, transparent 70%)",
-              filter: "blur(60px)",
+                'radial-gradient(circle, rgba(99,102,241,0.5) 0%, transparent 70%)',
+              filter: 'blur(60px)',
             }}
           />
           <div
             className="absolute w-56 h-56 rounded-full pointer-events-none animate-blob-alt -bottom-10 left-[8%]"
             style={{
               background:
-                "radial-gradient(circle, rgba(96,165,250,0.45) 0%, transparent 70%)",
-              filter: "blur(50px)",
+                'radial-gradient(circle, rgba(96,165,250,0.45) 0%, transparent 70%)',
+              filter: 'blur(50px)',
             }}
           />
 
@@ -45,25 +45,26 @@ export default function CTASection() {
               </span>
 
               <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-extrabold text-white leading-[1.15] tracking-tight">
-                Ready To Become Our Next{" "}
+                Ready To Become Our Next{' '}
                 <span
                   className="relative inline-block"
-                  style={{ textShadow: "0 0 40px rgba(255,255,255,0.3)" }}
+                  style={{ textShadow: '0 0 40px rgba(255,255,255,0.3)' }}
                 >
                   Success Story?
                 </span>
               </h2>
 
               <p className="text-base sm:text-lg text-blue-100 leading-relaxed font-normal max-w-xl">
-                Start learning today and build your dream career with industry experts, practical projects, and guaranteed career support.
+                Start learning today and build your dream career with industry
+                experts, practical projects, and guaranteed career support.
               </p>
 
               {/* Proof pills */}
               <div className="flex flex-wrap gap-3 pt-1">
                 {[
-                  { emoji: "👩‍💻", text: "10,000+ Alumni" },
-                  { emoji: "🏆", text: "98% Satisfaction" },
-                  { emoji: "💼", text: "150+ Hiring Partners" },
+                  { emoji: '👩‍💻', text: '10,000+ Alumni' },
+                  { emoji: '🏆', text: '98% Satisfaction' },
+                  { emoji: '💼', text: '150+ Hiring Partners' },
                 ].map((item) => (
                   <span
                     key={item.text}
@@ -79,7 +80,7 @@ export default function CTASection() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-stretch sm:items-center gap-3 shrink-0">
               <Link
-                to="/enroll"
+                to="/contact"
                 className="group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-base bg-white text-[#1e3a6e] shadow-lg shadow-white/20 hover:shadow-white/40 hover:-translate-y-0.5 transition-all duration-300"
               >
                 <span>Enroll Now</span>
