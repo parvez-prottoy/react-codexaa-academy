@@ -12,7 +12,6 @@ import {
 import { Link, useParams } from 'react-router-dom';
 import CourseFeatures from '../components/courses/CourseFeatures';
 import CourseOverview from '../components/courses/CourseOverview';
-import CTASection from '../components/courses/CTASection';
 import CurriculumAccordion from '../components/courses/CurriculumAccordion';
 import FAQSection from '../components/courses/FAQSection';
 import InstructorCard from '../components/courses/InstructorCard';
@@ -212,12 +211,6 @@ export default function CourseDetails() {
           <FAQSection faqs={course.faq} />
         </div>
       </section>
-
-      {/* 10. Call To Action Banner */}
-      <CTASection
-        title="Enroll Today & Become Job-Ready"
-        buttonText="Enroll Now"
-      />
     </div>
   );
 }
