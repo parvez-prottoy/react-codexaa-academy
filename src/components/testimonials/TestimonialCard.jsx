@@ -6,18 +6,23 @@ import VerifiedBadge from "./VerifiedBadge";
 export default function TestimonialCard({ item }) {
   const {
     name,
-    role,
+    position,
+    role = position,
     company,
     companyColor,
     companyBg,
-    avatar,
-    quote,
-    rating,
+    photo,
+    avatar = photo,
+    summary,
+    quote = summary,
+    rating = 5,
     course,
     gradYear,
-    verified,
-    linkedinUrl,
-    achievement,
+    verified = true,
+    linkedin,
+    linkedinUrl = linkedin,
+    salaryGrowth,
+    achievement = salaryGrowth,
   } = item;
 
   return (

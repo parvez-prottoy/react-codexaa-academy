@@ -5,21 +5,26 @@ import BlogHero from '../components/blog/BlogHero';
 import CategoryFilter from '../components/blog/CategoryFilter';
 import CTASection from '../components/blog/CTASection';
 import FeaturedBlog from '../components/blog/FeaturedBlog';
-import { blogCategories, blogPosts } from '../data/blogData';
+import { blogCategories } from '../data/blogData';
+import useFetch from '../hooks/useFetch';
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState('All');
 
+  const { data: blogPosts, loading, error } = useFetch('/blogs');
+
   // Extract featured post
   const featuredPost = useMemo(() => {
+    if (!blogPosts) return null;
     return blogPosts.find((post) => post.featured) || blogPosts[0];
-  }, []);
+  }, [blogPosts]);
 
   // Filter grid posts (excluding featured post if active, or based on category selection)
   const gridPosts = useMemo(() => {
+    if (!blogPosts) return [];
     return blogPosts.filter((post) => {
       // If post is the main featured post, we exclude it from grid when "All" is active to prevent duplication
-      if (post.id === featuredPost?.id && activeCategory === 'All') {
+      if (post._id === featuredPost?._id && activeCategory === 'All') {
         return false;
       }
 
@@ -32,7 +37,7 @@ export default function Blog() {
         post.tags?.some((t) => t.toLowerCase() === activeCategory.toLowerCase())
       );
     });
-  }, [activeCategory, featuredPost]);
+  }, [activeCategory, featuredPost, blogPosts]);
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
@@ -72,10 +77,18 @@ export default function Blog() {
           </div>
 
           {/* Grid View */}
-          {gridPosts.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 text-red-500">
+              <p>Failed to load articles: {error}</p>
+            </div>
+          ) : gridPosts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {gridPosts.map((post) => (
-                <BlogCard key={post.id} blog={post} />
+                <BlogCard key={post._id || post.id} blog={post} />
               ))}
             </div>
           ) : (

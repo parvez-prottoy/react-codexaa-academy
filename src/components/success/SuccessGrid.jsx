@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { HiSparkles, HiArrowRight, HiXMark } from "react-icons/hi2";
-import { successGrid } from "../../data/successStoriesData";
+import useFetch from "../../hooks/useFetch";
 
 export default function SuccessGrid() {
   const [selectedStory, setSelectedStory] = useState(null);
+  const { data: successGrid, loading, error } = useFetch("/success-stories");
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-slate-100">
@@ -25,61 +26,71 @@ export default function SuccessGrid() {
         </div>
 
         {/* Story Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {successGrid.map((item) => (
-            <div
-              key={item.id}
-              className="rounded-3xl bg-slate-50/70 border border-slate-200/80 p-6 flex flex-col justify-between hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
-            >
-              <div className="space-y-4">
-                {/* Header Profile */}
-                <div className="flex items-center gap-3">
-                  <img
-                    src={item.photo}
-                    alt={item.name}
-                    className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shadow-xs group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900 leading-snug">
-                      {item.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-[#2470A8]">
-                      {item.jobTitle}
-                    </p>
-                    <p className="text-[11px] text-slate-500 font-medium">
-                      {item.company}
-                    </p>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">
+            <p>Failed to load stories: {error}</p>
+          </div>
+        ) : successGrid && successGrid.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {successGrid.map((item) => (
+              <div
+                key={item._id || item.id}
+                className="rounded-3xl bg-slate-50/70 border border-slate-200/80 p-6 flex flex-col justify-between hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+              >
+                <div className="space-y-4">
+                  {/* Header Profile */}
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={item.photo}
+                      alt={item.name}
+                      className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shadow-xs group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs font-semibold text-[#2470A8]">
+                        {item.position || item.jobTitle}
+                      </p>
+                      <p className="text-[11px] text-slate-500 font-medium">
+                        {item.company}
+                      </p>
+                    </div>
                   </div>
+
+                  {/* Course Badge */}
+                  <div className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-100">
+                    {item.course}
+                  </div>
+
+                  {/* Quote */}
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed italic">
+                    "{item.summary || item.quote}"
+                  </p>
                 </div>
 
-                {/* Course Badge */}
-                <div className="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-100">
-                  {item.course}
+                {/* Read Full Story Button */}
+                <div className="pt-4 mt-4 border-t border-slate-100/80 flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">
+                    {item.salaryGrowth} Hike
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedStory(item)}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2470A8] hover:text-blue-800 transition-colors cursor-pointer"
+                  >
+                    <span>Read Full Story</span>
+                    <HiArrowRight size={14} />
+                  </button>
                 </div>
-
-                {/* Quote */}
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed italic">
-                  "{item.quote}"
-                </p>
               </div>
-
-              {/* Read Full Story Button */}
-              <div className="pt-4 mt-4 border-t border-slate-100/80 flex items-center justify-between">
-                <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">
-                  {item.salaryGrowth} Hike
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedStory(item)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2470A8] hover:text-blue-800 transition-colors cursor-pointer"
-                >
-                  <span>Read Full Story</span>
-                  <HiArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {/* Story Detail Modal */}

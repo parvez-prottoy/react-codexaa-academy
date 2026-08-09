@@ -105,21 +105,27 @@ function SectionHeading({ inView }) {
   );
 }
 
+import useFetch from "../../hooks/useFetch";
+
 /* ═══════════════════════════════════════════════
    CoursesSection — Main Section Component
 ═══════════════════════════════════════════════ */
-export default function CoursesSection() {
+export default function CoursesSection({ featuredOnly = false }) {
   const [activeCategory, setActiveCategory] = useState("All");
   const [headerRef, headerInView] = useInView(0.15);
 
+  const endpoint = featuredOnly ? "/courses?featured=true" : "/courses";
+  const { data: courses, loading, error } = useFetch(endpoint);
+
   const displayedCourses = useMemo(() => {
+    if (!courses) return [];
     if (activeCategory === "All") {
-      return courseData;
+      return courses;
     }
-    return courseData.filter(
+    return courses.filter(
       (c) => c.category.toLowerCase() === activeCategory.toLowerCase()
     );
-  }, [activeCategory]);
+  }, [activeCategory, courses]);
 
   return (
     <section
@@ -145,13 +151,27 @@ export default function CoursesSection() {
         </div>
 
         {/* Dynamic Course Grid (1 col mobile, 2 tablet, 3 desktop) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
-          {displayedCourses.map((course) => (
-            <div key={course.id} className="flex h-full">
-              <CourseCard course={course} />
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-red-500">
+            <p>Failed to load courses: {error}</p>
+          </div>
+        ) : displayedCourses.length === 0 ? (
+          <div className="text-center py-20 text-slate-500">
+            <p>No courses found for this category.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+            {displayedCourses.map((course) => (
+              <div key={course._id || course.id} className="flex h-full">
+                <CourseCard course={course} />
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* View All CTA */}
         <div className="flex justify-center mt-10 sm:mt-12">

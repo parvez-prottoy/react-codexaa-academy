@@ -16,7 +16,7 @@ export default function Home() {
 
       <TrustedCompanies />
 
-      <CoursesSection />
+      <CoursesSection featuredOnly={false} />
 
       <CrossPlatformSection />
 

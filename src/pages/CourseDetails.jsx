@@ -16,18 +16,28 @@ import CurriculumAccordion from '../components/courses/CurriculumAccordion';
 import FAQSection from '../components/courses/FAQSection';
 import InstructorCard from '../components/courses/InstructorCard';
 import LearningOutcomes from '../components/courses/LearningOutcomes';
-import { courseData } from '../data/courseData';
+import useFetch from '../hooks/useFetch';
 
 export default function CourseDetails() {
   const { slug } = useParams();
 
-  const course = useMemo(() => {
+  const { data: course, loading, error } = useFetch(`/courses/${slug}`);
+
+  if (loading) {
     return (
-      courseData.find((c) => c.slug === slug || c.id === slug) ||
-      courseData.find((c) => c.featured) ||
-      courseData[0]
+      <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+      </div>
     );
-  }, [slug]);
+  }
+
+  if (error || !course) {
+    return (
+      <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50 flex justify-center items-center text-red-500">
+        <p>{error || 'Course not found'}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">

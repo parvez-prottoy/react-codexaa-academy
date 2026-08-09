@@ -9,10 +9,10 @@ import {
 } from "swiper/modules";
 
 import useInView from "../../hooks/useInView";
-import { testimonials } from "../../data/testimonialData";
 import TestimonialCard from "./TestimonialCard";
 import NavigationButtons from "./NavigationButtons";
 import TrustArea from "./TrustArea";
+import useFetch from "../../hooks/useFetch";
 
 // Swiper core styles
 import "swiper/css";
@@ -165,6 +165,8 @@ export default function TestimonialsSection() {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
+  const { data: testimonials, loading, error } = useFetch("/success-stories");
+
   return (
     <section
       id="testimonials"
@@ -185,70 +187,80 @@ export default function TestimonialsSection() {
 
         {/* ── Swiper Slider Container ── */}
         <div className="relative testimonials-slider-wrapper">
-          <Swiper
-            modules={[
-              Autoplay,
-              Navigation,
-              Pagination,
-              Keyboard,
-              EffectCoverflow,
-            ]}
-            effect="coverflow"
-            grabCursor={true}
-            centeredSlides={true}
-            loop={true}
-            speed={700}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            keyboard={{
-              enabled: true,
-            }}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 0,
-              depth: 120,
-              modifier: 1.8,
-              slideShadows: false,
-            }}
-            onBeforeInit={(swiper) => {
-              swiper.params.navigation.prevEl = prevRef.current;
-              swiper.params.navigation.nextEl = nextRef.current;
-            }}
-            pagination={{
-              clickable: true,
-              el: ".testimonials-pagination",
-              bulletClass: "testimonials-bullet",
-              bulletActiveClass: "testimonials-bullet-active",
-            }}
-            breakpoints={{
-              0: {
-                slidesPerView: 1,
-                spaceBetween: 16,
-              },
-              640: {
-                slidesPerView: 1.25,
-                spaceBetween: 24,
-              },
-              1024: {
-                slidesPerView: 1.85,
-                spaceBetween: 32,
-              },
-              1280: {
-                slidesPerView: 2.1,
-                spaceBetween: 40,
-              },
-            }}
-            className="testimonials-swiper py-6! px-2! overflow-visible"
-          >
-            {testimonials.map((item) => (
-              <SwiperSlide key={item.id} className="h-auto">
-                <TestimonialCard item={item} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 text-red-500">
+              <p>Failed to load testimonials: {error}</p>
+            </div>
+          ) : testimonials && testimonials.length > 0 ? (
+            <Swiper
+              modules={[
+                Autoplay,
+                Navigation,
+                Pagination,
+                Keyboard,
+                EffectCoverflow,
+              ]}
+              effect="coverflow"
+              grabCursor={true}
+              centeredSlides={true}
+              loop={true}
+              speed={700}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              keyboard={{
+                enabled: true,
+              }}
+              coverflowEffect={{
+                rotate: 0,
+                stretch: 0,
+                depth: 120,
+                modifier: 1.8,
+                slideShadows: false,
+              }}
+              onBeforeInit={(swiper) => {
+                swiper.params.navigation.prevEl = prevRef.current;
+                swiper.params.navigation.nextEl = nextRef.current;
+              }}
+              pagination={{
+                clickable: true,
+                el: ".testimonials-pagination",
+                bulletClass: "testimonials-bullet",
+                bulletActiveClass: "testimonials-bullet-active",
+              }}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  spaceBetween: 16,
+                },
+                640: {
+                  slidesPerView: 1.25,
+                  spaceBetween: 24,
+                },
+                1024: {
+                  slidesPerView: 1.85,
+                  spaceBetween: 32,
+                },
+                1280: {
+                  slidesPerView: 2.1,
+                  spaceBetween: 40,
+                },
+              }}
+              className="testimonials-swiper py-6! px-2! overflow-visible"
+            >
+              {testimonials.map((item) => (
+                <SwiperSlide key={item._id || item.id} className="h-auto">
+                  <TestimonialCard item={item} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          ) : null}
 
           {/* Navigation Buttons (Mobile View — Centered below card) */}
           <div className="flex md:hidden items-center justify-center mt-6">

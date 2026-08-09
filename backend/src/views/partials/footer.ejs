@@ -1,0 +1,45 @@
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Global Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+  <!-- Initialize Lucide Icons -->
+  <script>
+    lucide.createIcons();
+
+    // Global Toast Function
+    window.showToast = function(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      
+      // Determine colors based on type
+      const bg = type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800';
+      const icon = type === 'success' ? '<i data-lucide="check-circle" class="w-5 h-5 text-emerald-500"></i>' : '<i data-lucide="alert-circle" class="w-5 h-5 text-red-500"></i>';
+      
+      toast.className = `toast-enter flex items-center gap-3 px-4 py-3 rounded-lg border shadow-lg ${bg}`;
+      toast.innerHTML = `
+        ${icon}
+        <p class="text-sm font-medium">${message}</p>
+        <button onclick="this.parentElement.remove()" class="ml-auto text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      `;
+      
+      container.appendChild(toast);
+      lucide.createIcons(); // Re-init icons for the new toast
+
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

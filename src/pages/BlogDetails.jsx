@@ -10,22 +10,42 @@ import {
 import { Link, useParams } from 'react-router-dom';
 import BlogCard from '../components/blog/BlogCard';
 import CTASection from '../components/blog/CTASection';
-import { blogPosts } from '../data/blogData';
+import useFetch from '../hooks/useFetch';
 
 export default function BlogDetails() {
   const { slug } = useParams();
 
+  const { data: blogPosts, loading, error } = useFetch('/blogs');
+
   const blog = useMemo(() => {
+    if (!blogPosts) return null;
     return (
       blogPosts.find((item) => item.slug === slug) ||
       blogPosts.find((item) => item.featured) ||
       blogPosts[0]
     );
-  }, [slug]);
+  }, [slug, blogPosts]);
 
   const relatedPosts = useMemo(() => {
+    if (!blogPosts || !blog) return [];
     return blogPosts.filter((item) => item.slug !== blog.slug).slice(0, 2);
-  }, [blog]);
+  }, [blog, blogPosts]);
+
+  if (loading) {
+    return (
+      <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50 flex justify-center items-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+      </div>
+    );
+  }
+
+  if (error || !blog) {
+    return (
+      <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50 flex justify-center items-center text-red-500">
+        <p>{error || 'Article not found'}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">

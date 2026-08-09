@@ -4,14 +4,17 @@ import { A11y, Autoplay, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { HiStar } from "react-icons/hi2";
-import { reviewData, trustAvatarStack } from "../../data/reviewData";
+import { trustAvatarStack } from "../../data/reviewData";
 import ReviewCard from "./ReviewCard";
+import useFetch from "../../hooks/useFetch";
 
 import RatingStars from "./RatingStars";
 
 export default function ReviewSlider() {
   const [swiperInstance, setSwiperInstance] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const { data: reviewData, loading, error } = useFetch("/success-stories");
 
   return (
     <section className="relative overflow-hidden py-16 sm:py-24 lg:py-28 bg-linear-to-b from-white via-blue-50/30 to-slate-50 border-b border-slate-100">
@@ -83,62 +86,74 @@ export default function ReviewSlider() {
 
         {/* Swiper Container (Strictly bounded inside max-w-7xl) */}
         <div className="relative w-full overflow-hidden py-4">
-          <Swiper
-            modules={[Autoplay, Keyboard, A11y]}
-            onSwiper={setSwiperInstance}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            loop={true}
-            centeredSlides={true}
-            slidesPerView={1}
-            spaceBetween={20}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
-            }}
-            keyboard={{ enabled: true }}
-            breakpoints={{
-              640: {
-                slidesPerView: 2,
-                centeredSlides: false,
-                spaceBetween: 24,
-              },
-              1024: {
-                slidesPerView: 3,
-                centeredSlides: true,
-                spaceBetween: 28,
-              },
-            }}
-            className="w-full overflow-hidden"
-          >
-            {reviewData.map((review) => (
-              <SwiperSlide
-                key={review.id}
-                className="h-auto transition-all duration-500 py-2"
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3695d0]"></div>
+            </div>
+          ) : error ? (
+            <div className="text-center py-20 text-red-500">
+              <p>Failed to load reviews: {error}</p>
+            </div>
+          ) : reviewData && reviewData.length > 0 ? (
+            <>
+              <Swiper
+                modules={[Autoplay, Keyboard, A11y]}
+                onSwiper={setSwiperInstance}
+                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                loop={true}
+                centeredSlides={true}
+                slidesPerView={1}
+                spaceBetween={20}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                keyboard={{ enabled: true }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                    centeredSlides: false,
+                    spaceBetween: 24,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    centeredSlides: true,
+                    spaceBetween: 28,
+                  },
+                }}
+                className="w-full overflow-hidden"
               >
-                {({ isActive }) => (
-                  <ReviewCard review={review} isActive={isActive} />
-                )}
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                {reviewData.map((review) => (
+                  <SwiperSlide
+                    key={review._id || review.id}
+                    className="h-auto transition-all duration-500 py-2"
+                  >
+                    {({ isActive }) => (
+                      <ReviewCard review={review} isActive={isActive} />
+                    )}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
 
-          {/* Custom Animated Pill Pagination */}
-          <div className="flex items-center justify-center gap-2 mt-10">
-            {reviewData.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => swiperInstance?.slideToLoop(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-                className={`transition-all duration-300 cursor-pointer ${
-                  activeIndex === idx
-                    ? "w-8 h-2.5 rounded-full bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8] shadow-sm shadow-blue-500/30"
-                    : "w-2.5 h-2.5 rounded-full bg-slate-300 hover:bg-slate-400"
-                }`}
-              />
-            ))}
-          </div>
+              {/* Custom Animated Pill Pagination */}
+              <div className="flex items-center justify-center gap-2 mt-10">
+                {reviewData.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => swiperInstance?.slideToLoop(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`transition-all duration-300 cursor-pointer ${
+                      activeIndex === idx
+                        ? "w-8 h-2.5 rounded-full bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8] shadow-sm shadow-blue-500/30"
+                        : "w-2.5 h-2.5 rounded-full bg-slate-300 hover:bg-slate-400"
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          ) : null}
         </div>
 
         {/* Bottom Trust Section */}

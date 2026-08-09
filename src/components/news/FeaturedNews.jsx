@@ -7,9 +7,8 @@ import {
   HiSparkles,
   HiXMark,
 } from "react-icons/hi2";
-import { featuredNewsItem } from "../../data/newsData";
 
-export default function FeaturedNews() {
+export default function FeaturedNews({ featuredNewsItem }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

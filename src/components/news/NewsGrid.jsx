@@ -1,8 +1,7 @@
 import { HiNewspaper } from "react-icons/hi2";
-import { newsList } from "../../data/newsData";
 import NewsCard from "./NewsCard";
 
-export default function NewsGrid() {
+export default function NewsGrid({ newsList = [] }) {
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-slate-50/60 border-b border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

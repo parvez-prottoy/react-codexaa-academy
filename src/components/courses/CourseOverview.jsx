@@ -13,7 +13,7 @@ export default function CourseOverview({ course }) {
       </div>
 
       <div className="space-y-4 text-slate-700 leading-relaxed text-base font-normal">
-        {course.fullDescription
+        {(course.fullDescription || course.shortDescription || "")
           .split("\n\n")
           .map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
