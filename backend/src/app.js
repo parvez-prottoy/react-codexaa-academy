@@ -1,8 +1,7 @@
-import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
 import helmet from 'helmet';
-import morgan from 'morgan';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -21,26 +20,29 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(helmet({
-  contentSecurityPolicy: false,
-}));
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+app.use(
+  cors({
+    origin: true, // Allow all origins dynamically (important for Vercel preview deployments)
+    credentials: true,
+  })
+);
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+  })
+);
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+import adminRoutes from './routes/adminRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import blogRoutes from './routes/blogRoutes.js';
+import companyRoutes from './routes/companyRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import newsRoutes from './routes/newsRoutes.js';
-import blogRoutes from './routes/blogRoutes.js';
 import successStoryRoutes from './routes/successStoryRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
-import companyRoutes from './routes/companyRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
 
 // Admin View Routes
 app.use('/admin', adminRoutes);
