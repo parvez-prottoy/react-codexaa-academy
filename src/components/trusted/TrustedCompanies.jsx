@@ -143,14 +143,10 @@ function Divider({ label }) {
 /* ═══════════════════════════════════════════════
    TrustedCompanies — Main Section
 ═══════════════════════════════════════════════ */
-import useFetch from '../../hooks/useFetch';
-
 export default function TrustedCompanies() {
   const [headerRef, headerInView] = useInView(0.15);
   const [statsRef, statsInView] = useInView(0.15);
   const [gridRef, gridInView] = useInView(0.1);
-
-  const { data: companies, loading, error } = useFetch('/companies');
 
   const international = companies ? companies.filter((c) => c.category === 'international') : [];
 
@@ -196,15 +192,7 @@ export default function TrustedCompanies() {
           {/* International companies */}
           {/* <CategoryLabel label="International Companies" color="#2B7CAD" /> */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-10">
-            {loading ? (
-              <div className="col-span-full flex justify-center py-10">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#3695d0]"></div>
-              </div>
-            ) : error ? (
-              <div className="col-span-full text-center py-10 text-red-500">
-                <p>Failed to load companies: {error}</p>
-              </div>
-            ) : international && international.length > 0 ? (
+            {international && international.length > 0 ? (
               international.map((company, i) => (
                 <div
                   key={company._id || company.id}

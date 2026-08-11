@@ -12,7 +12,7 @@
 </div>
 
 <!-- Table Section -->
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mt-6">
   <div class="overflow-x-auto">
     <table class="w-full text-left border-collapse">
       <thead>
@@ -58,7 +58,7 @@
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onclick="openModal('<%= course._id %>', <%= JSON.stringify(course) %>)" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors" title="Edit">
+                  <button onclick="openModal('<%= course._id %>', <%= JSON.stringify(course).replace(/"/g, '&quot;') %>)" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors" title="Edit">
                     <i data-lucide="edit-2" class="w-4 h-4"></i>
                   </button>
                   <button onclick="deleteCourse('<%= course._id %>')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Delete">
@@ -86,9 +86,9 @@
 <!-- Modal Overlay -->
 <div id="courseModal" class="fixed inset-0 z-50 hidden">
   <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
-  <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl flex flex-col transform transition-transform translate-x-full duration-300" id="modalPanel">
+  <div class="absolute right-0 top-0 bottom-0 w-full max-w-3xl bg-white shadow-2xl flex flex-col transform transition-transform translate-x-full duration-300" id="modalPanel">
     
-    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100 shrink-0">
       <h3 class="text-lg font-bold text-slate-800" id="modalTitle">Add New Course</h3>
       <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -96,44 +96,112 @@
     </div>
 
     <div class="flex-1 overflow-y-auto p-6">
-      <form id="courseForm" class="space-y-4">
+      <form id="courseForm" class="space-y-6">
         <input type="hidden" id="courseId" name="_id">
         
+        <!-- SECTION: Basic Info -->
         <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
-          <input type="text" name="title" id="courseTitle" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm">
-        </div>
-        
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Category</label>
-          <input type="text" name="category" id="courseCategory" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm">
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Instructor</label>
-            <input type="text" name="instructor" id="courseInstructor" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm">
+          <h4 class="text-sm font-bold text-brand-600 mb-3 uppercase tracking-wider">Basic Information</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Title</label>
+              <input type="text" name="title" id="courseTitle" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Category</label>
+              <input type="text" name="category" id="courseCategory" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Instructor Name</label>
+              <input type="text" name="instructor" id="courseInstructor" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Price</label>
+              <input type="text" name="price" id="coursePrice" placeholder="e.g. $99 or Free" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Upload Image</label>
+              <input type="file" name="image" id="courseImage" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+              <p class="text-[11px] text-slate-500 mt-1">Leave empty to keep existing image when editing.</p>
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Short Description</label>
+              <textarea name="shortDescription" id="courseShortDesc" rows="2" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm"></textarea>
+            </div>
+            <div class="col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Full Detailed Description</label>
+              <textarea name="fullDescription" id="courseFullDesc" rows="4" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm"></textarea>
+            </div>
           </div>
-          <div>
-            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Price</label>
-            <input type="text" name="price" id="coursePrice" placeholder="e.g. $99" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm">
+        </div>
+
+        <!-- SECTION: Course Specs -->
+        <div class="border-t border-slate-100 pt-6">
+          <h4 class="text-sm font-bold text-brand-600 mb-3 uppercase tracking-wider">Course Specifications</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Duration (e.g., 12 Weeks)</label>
+              <input type="text" name="duration" id="courseDuration" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Skill Level (e.g., Beginner)</label>
+              <input type="text" name="level" id="courseLevel" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Total Enrolled Students</label>
+              <input type="text" name="students" id="courseStudents" placeholder="e.g. 1.2k+" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label class="block text-xs font-semibold text-slate-700 mb-1.5">Number of Projects</label>
+              <input type="text" name="projects" id="courseProjects" placeholder="e.g. 5 Hands-on Projects" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-sm">
+            </div>
           </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Upload Image</label>
-          <input type="file" name="image" id="courseImage" accept="image/*" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm">
-          <p class="text-xs text-slate-500 mt-1">Leave empty to keep existing image when editing.</p>
-        </div>
+        <!-- SECTION: Dynamic Arrays -->
+        <div class="border-t border-slate-100 pt-6 space-y-6">
+          
+          <!-- Learning Outcomes -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-brand-600 uppercase tracking-wider">Learning Outcomes</h4>
+              <button type="button" onclick="addLO()" class="text-xs bg-brand-50 text-brand-600 hover:bg-brand-100 font-bold px-2 py-1 rounded-md transition-colors">+ Add Outcome</button>
+            </div>
+            <div id="loContainer" class="space-y-2"></div>
+          </div>
 
-        <div>
-          <label class="block text-sm font-semibold text-slate-700 mb-1.5">Short Description</label>
-          <textarea name="shortDescription" id="courseDesc" rows="3" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all sm:text-sm"></textarea>
+          <!-- Curriculum -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-brand-600 uppercase tracking-wider">Curriculum / Modules</h4>
+              <button type="button" onclick="addCurriculum()" class="text-xs bg-brand-50 text-brand-600 hover:bg-brand-100 font-bold px-2 py-1 rounded-md transition-colors">+ Add Module</button>
+            </div>
+            <div id="currContainer" class="space-y-4"></div>
+          </div>
+
+          <!-- Features -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-brand-600 uppercase tracking-wider">Key Features</h4>
+              <button type="button" onclick="addFeature()" class="text-xs bg-brand-50 text-brand-600 hover:bg-brand-100 font-bold px-2 py-1 rounded-md transition-colors">+ Add Feature</button>
+            </div>
+            <div id="featContainer" class="space-y-3"></div>
+          </div>
+
+          <!-- FAQs -->
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-brand-600 uppercase tracking-wider">FAQs</h4>
+              <button type="button" onclick="addFAQ()" class="text-xs bg-brand-50 text-brand-600 hover:bg-brand-100 font-bold px-2 py-1 rounded-md transition-colors">+ Add FAQ</button>
+            </div>
+            <div id="faqContainer" class="space-y-3"></div>
+          </div>
+
         </div>
       </form>
     </div>
 
-    <div class="p-6 border-t border-slate-100 bg-slate-50">
+    <div class="p-6 border-t border-slate-100 bg-slate-50 shrink-0">
       <button type="button" onclick="submitForm()" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded-lg font-medium shadow-sm shadow-brand-500/30 transition-colors flex items-center justify-center gap-2">
         <i data-lucide="save" class="w-4 h-4"></i>
         <span>Save Course</span>
@@ -148,23 +216,106 @@
   const form = document.getElementById('courseForm');
   let currentMode = 'create';
 
+  // Dynamic Builders
+  function addLO(value = '') {
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 bg-slate-50 p-2 rounded-lg border border-slate-200';
+    div.innerHTML = `
+      <input type="text" class="lo-input flex-1 bg-transparent text-sm focus:outline-none" placeholder="e.g. Master React Hooks" value="${value}">
+      <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-red-500 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+    `;
+    document.getElementById('loContainer').appendChild(div);
+    if(window.lucide) lucide.createIcons();
+  }
+
+  function addCurriculum(title = '', duration = '', topics = []) {
+    const div = document.createElement('div');
+    div.className = 'curr-row bg-slate-50 p-4 rounded-xl border border-slate-200 relative group';
+    div.innerHTML = `
+      <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      <div class="grid grid-cols-2 gap-3 pr-8">
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase">Module Title</label>
+          <input type="text" class="curr-title w-full mt-1 px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" value="${title}">
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase">Duration</label>
+          <input type="text" class="curr-duration w-full mt-1 px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" value="${duration}">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-[10px] font-bold text-slate-500 uppercase">Topics (Comma separated)</label>
+          <input type="text" class="curr-topics w-full mt-1 px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" value="${topics.join(', ')}">
+        </div>
+      </div>
+    `;
+    document.getElementById('currContainer').appendChild(div);
+    if(window.lucide) lucide.createIcons();
+  }
+
+  function addFeature(title = '', desc = '') {
+    const div = document.createElement('div');
+    div.className = 'feat-row bg-slate-50 p-3 rounded-xl border border-slate-200 flex gap-3 relative group';
+    div.innerHTML = `
+      <div class="flex-1 space-y-2 pr-6">
+        <input type="text" class="feat-title w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" placeholder="Feature Title" value="${title}">
+        <input type="text" class="feat-desc w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" placeholder="Short description" value="${desc}">
+      </div>
+      <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+    `;
+    document.getElementById('featContainer').appendChild(div);
+    if(window.lucide) lucide.createIcons();
+  }
+
+  function addFAQ(q = '', a = '') {
+    const div = document.createElement('div');
+    div.className = 'faq-row bg-slate-50 p-3 rounded-xl border border-slate-200 relative group';
+    div.innerHTML = `
+      <button type="button" onclick="this.parentElement.remove()" class="absolute top-3 right-3 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      <div class="space-y-2 pr-8">
+        <input type="text" class="faq-q w-full px-2 py-1.5 bg-white border border-slate-200 rounded font-semibold text-sm focus:outline-none focus:border-brand-500" placeholder="Question" value="${q}">
+        <textarea class="faq-a w-full px-2 py-1.5 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-brand-500" placeholder="Answer" rows="2">${a}</textarea>
+      </div>
+    `;
+    document.getElementById('faqContainer').appendChild(div);
+    if(window.lucide) lucide.createIcons();
+  }
+
   function openModal(id = null, data = null) {
     modal.classList.remove('hidden');
-    // slight delay for animation
-    setTimeout(() => {
-      panel.classList.remove('translate-x-full');
-    }, 10);
+    setTimeout(() => { panel.classList.remove('translate-x-full'); }, 10);
     
+    // Clear dynamic containers
+    document.getElementById('loContainer').innerHTML = '';
+    document.getElementById('currContainer').innerHTML = '';
+    document.getElementById('featContainer').innerHTML = '';
+    document.getElementById('faqContainer').innerHTML = '';
+
     if (id && data) {
       currentMode = 'edit';
       document.getElementById('modalTitle').innerText = 'Edit Course';
       document.getElementById('courseId').value = id;
+      
+      // Basic Info
       document.getElementById('courseTitle').value = data.title || '';
       document.getElementById('courseCategory').value = data.category || '';
       document.getElementById('courseInstructor').value = data.instructor || '';
       document.getElementById('coursePrice').value = data.price || '';
-      document.getElementById('courseImage').value = ''; // Cannot set value for file input
-      document.getElementById('courseDesc').value = data.shortDescription || '';
+      document.getElementById('courseImage').value = '';
+      document.getElementById('courseShortDesc').value = data.shortDescription || '';
+      document.getElementById('courseFullDesc').value = data.fullDescription || '';
+      
+      // Specs
+      document.getElementById('courseDuration').value = data.duration || '';
+      document.getElementById('courseLevel').value = data.level || '';
+      document.getElementById('courseStudents').value = data.students || '';
+      document.getElementById('courseProjects').value = data.projects || '';
+
+      // Load Dynamic Data
+      if(data.learningOutcomes) data.learningOutcomes.forEach(item => addLO(item));
+      if(data.curriculum) data.curriculum.forEach(item => addCurriculum(item.title, item.duration, item.topics));
+      if(data.features) data.features.forEach(item => addFeature(item.title, item.desc));
+      if(data.faq) data.faq.forEach(item => addFAQ(item.q, item.a));
+      
     } else {
       currentMode = 'create';
       document.getElementById('modalTitle').innerText = 'Add New Course';
@@ -175,16 +326,11 @@
 
   function closeModal() {
     panel.classList.add('translate-x-full');
-    setTimeout(() => {
-      modal.classList.add('hidden');
-    }, 300); // match duration-300
+    setTimeout(() => { modal.classList.add('hidden'); }, 300);
   }
 
   async function submitForm() {
-    if(!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
+    if(!form.checkValidity()) { form.reportValidity(); return; }
 
     const btn = document.getElementById('submitBtn');
     const originalText = btn.innerHTML;
@@ -195,19 +341,40 @@
     const id = formData.get('_id');
     formData.delete('_id');
 
-    // If edit mode and no new file selected, remove the empty file from formData
     if (currentMode === 'edit' && formData.get('image') && formData.get('image').size === 0) {
       formData.delete('image');
     }
+
+    // Build Dynamic Arrays
+    const loArray = Array.from(document.querySelectorAll('.lo-input')).map(inp => inp.value).filter(v => v.trim() !== '');
+    
+    const currArray = Array.from(document.querySelectorAll('.curr-row')).map(row => ({
+      title: row.querySelector('.curr-title').value,
+      duration: row.querySelector('.curr-duration').value,
+      topics: row.querySelector('.curr-topics').value.split(',').map(t => t.trim()).filter(t => t !== '')
+    })).filter(c => c.title.trim() !== '');
+
+    const featArray = Array.from(document.querySelectorAll('.feat-row')).map(row => ({
+      title: row.querySelector('.feat-title').value,
+      desc: row.querySelector('.feat-desc').value
+    })).filter(f => f.title.trim() !== '');
+
+    const faqArray = Array.from(document.querySelectorAll('.faq-row')).map(row => ({
+      q: row.querySelector('.faq-q').value,
+      a: row.querySelector('.faq-a').value
+    })).filter(f => f.q.trim() !== '');
+
+    // Append as JSON strings
+    formData.append('learningOutcomes', JSON.stringify(loArray));
+    formData.append('curriculum', JSON.stringify(currArray));
+    formData.append('features', JSON.stringify(featArray));
+    formData.append('faq', JSON.stringify(faqArray));
 
     const url = currentMode === 'edit' ? `/api/v1/courses/${id}` : '/api/v1/courses';
     const method = currentMode === 'edit' ? 'PUT' : 'POST';
 
     try {
-      const response = await fetch(url, {
-        method,
-        body: formData // Browser automatically sets multipart/form-data boundary
-      });
+      const response = await fetch(url, { method, body: formData });
       const result = await response.json();
       
       if(result.success) {
@@ -216,13 +383,11 @@
         setTimeout(() => window.location.reload(), 1000);
       } else {
         showToast(result.error || 'Failed to save', 'error');
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        btn.disabled = false; btn.innerHTML = originalText;
       }
     } catch(err) {
       showToast('A network error occurred.', 'error');
-      btn.disabled = false;
-      btn.innerHTML = originalText;
+      btn.disabled = false; btn.innerHTML = originalText;
     }
   }
 
@@ -234,12 +399,8 @@
         if(result.success) {
           showToast('Course deleted permanently.', 'success');
           setTimeout(() => window.location.reload(), 1000);
-        } else {
-          showToast('Failed to delete course.', 'error');
-        }
-      } catch(err) {
-        showToast('A network error occurred.', 'error');
-      }
+        } else showToast('Failed to delete course.', 'error');
+      } catch(err) { showToast('A network error occurred.', 'error'); }
     }
   }
 </script>

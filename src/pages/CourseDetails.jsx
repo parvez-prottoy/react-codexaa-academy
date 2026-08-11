@@ -206,19 +206,29 @@ export default function CourseDetails() {
           <CourseOverview course={course} />
 
           {/* 3. What You Will Learn */}
-          <LearningOutcomes outcomes={course.learningOutcomes} />
+          {course.learningOutcomes && course.learningOutcomes.length > 0 && (
+            <LearningOutcomes outcomes={course.learningOutcomes} />
+          )}
 
           {/* 4. Course Curriculum Accordion */}
-          <CurriculumAccordion curriculum={course.curriculum} />
+          {course.curriculum && course.curriculum.length > 0 && (
+            <CurriculumAccordion curriculum={course.curriculum} />
+          )}
 
           {/* 5. Instructor Section */}
-          <InstructorCard course={course} />
+          {course.instructor && (
+            <InstructorCard course={course} />
+          )}
 
           {/* 6. Course Features & Benefits */}
-          <CourseFeatures features={course.features} />
+          {course.features && course.features.length > 0 && (
+            <CourseFeatures features={course.features} />
+          )}
 
-          {/* 8. FAQ Accordion */}
-          <FAQSection faqs={course.faq} />
+          {/* 7. FAQ Accordion */}
+          {course.faq && course.faq.length > 0 && (
+            <FAQSection faqs={course.faq} />
+          )}
         </div>
       </section>
     </div>

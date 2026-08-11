@@ -45,6 +45,17 @@ export const createCourse = async (req, res, next) => {
   try {
     const courseData = { ...req.body };
 
+    // Parse complex fields sent as JSON strings from FormData
+    ['learningOutcomes', 'curriculum', 'features', 'faq'].forEach((field) => {
+      if (courseData[field] && typeof courseData[field] === 'string') {
+        try {
+          courseData[field] = JSON.parse(courseData[field]);
+        } catch (e) {
+          console.error(`Error parsing ${field}:`, e);
+        }
+      }
+    });
+
     if (!courseData.slug && courseData.title) {
       courseData.slug = slugify(courseData.title, {
         lower: true,
@@ -71,6 +82,17 @@ export const createCourse = async (req, res, next) => {
 export const updateCourse = async (req, res, next) => {
   try {
     const courseData = { ...req.body };
+
+    // Parse complex fields sent as JSON strings from FormData
+    ['learningOutcomes', 'curriculum', 'features', 'faq'].forEach((field) => {
+      if (courseData[field] && typeof courseData[field] === 'string') {
+        try {
+          courseData[field] = JSON.parse(courseData[field]);
+        } catch (e) {
+          console.error(`Error parsing ${field}:`, e);
+        }
+      }
+    });
 
     if (courseData.title && !courseData.slug) {
       courseData.slug = slugify(courseData.title, {
