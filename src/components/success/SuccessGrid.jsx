@@ -116,14 +116,14 @@ export default function SuccessGrid() {
                   {selectedStory.name}
                 </h3>
                 <p className="text-sm font-semibold text-[#2470A8]">
-                  {selectedStory.jobTitle} @ {selectedStory.company}
+                  {selectedStory.position || selectedStory.jobTitle} @ {selectedStory.company}
                 </p>
                 <p className="text-xs text-slate-500">{selectedStory.course}</p>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 text-sm text-slate-700 leading-relaxed italic">
-              "{selectedStory.quote}"
+              "{selectedStory.summary || selectedStory.quote}"
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed">

@@ -5,15 +5,17 @@ const successStorySchema = new mongoose.Schema(
     name: { type: String, required: true },
     position: { type: String },
     company: { type: String },
-    companyLogo: { type: String }, // URL
+    companyColor: { type: String, default: '#3b82f6' },
+    companyBg: { type: String, default: '#eff6ff' },
     photo: { type: String, required: true }, // URL
     previousBackground: { type: String },
-    currentAchievement: { type: String },
     salaryGrowth: { type: String },
     course: { type: String },
     summary: { type: String },
     linkedin: { type: String },
-    badge: { type: String },
+    rating: { type: Number, default: 5, min: 1, max: 5 },
+    gradYear: { type: String },
+    verified: { type: Boolean, default: true },
     isPublished: { type: Boolean, default: true },
   },
   {

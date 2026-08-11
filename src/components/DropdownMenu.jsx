@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { HiArrowRight } from "react-icons/hi2";
-import { courseData } from "../data/courseData";
+import { courseData as staticCourseData } from "../data/courseData";
 import CourseMenuItem from "./CourseMenuItem";
+import useFetch from "../hooks/useFetch";
 
 export default function DropdownMenu({
   isOpen,
@@ -31,6 +32,9 @@ export default function DropdownMenu({
     if (isOpen) document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
   }, [isOpen, onClose]);
+
+  // Fetch courses dynamically from backend
+  const { data: apiCourses, loading } = useFetch("/courses");
 
   return (
     <div
@@ -77,9 +81,28 @@ export default function DropdownMenu({
 
         {/* Grid */}
         <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-          {courseData.slice(0, 6).map((course) => (
-            <CourseMenuItem key={course.id} course={course} onClick={onClose} />
-          ))}
+          {loading ? (
+            // Skeleton Loader
+            [1, 2, 3, 4].map((n) => (
+              <div key={n} className="flex items-center gap-3 p-3 animate-pulse">
+                <div className="w-9 h-9 rounded-lg bg-slate-100 shrink-0"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 bg-slate-100 rounded w-3/4"></div>
+                  <div className="h-2 bg-slate-100 rounded w-1/2"></div>
+                </div>
+              </div>
+            ))
+          ) : apiCourses && apiCourses.length > 0 ? (
+            // Render dynamic backend courses
+            apiCourses.slice(0, 6).map((course) => (
+              <CourseMenuItem key={course._id} course={course} onClick={onClose} />
+            ))
+          ) : (
+            // No courses found
+            <div className="col-span-2 py-6 text-center text-slate-400 text-sm">
+              No courses available at the moment.
+            </div>
+          )}
         </div>
 
         {/* Footer CTA */}

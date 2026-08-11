@@ -60,6 +60,20 @@ app.get('/api/v1', (req, res) => {
   res.json({ message: 'Welcome to Codexaa Academy API' });
 });
 
+// Temporary debug route
+app.get('/api/v1/debug', (req, res) => {
+  const secret = process.env.CLOUDINARY_API_SECRET || '';
+  res.json({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    secret_length: secret.length,
+    secret_starts_with: secret.substring(0, 4),
+    secret_ends_with: secret.substring(secret.length - 4),
+    has_spaces: secret !== secret.trim(),
+    cloudinary_url_set: !!process.env.CLOUDINARY_URL
+  });
+});
+
 // Error Handling Middleware
 app.use(notFound);
 app.use(errorHandler);
