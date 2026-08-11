@@ -81,6 +81,18 @@ export const createCourse = async (req, res, next) => {
 // @access  Private/Admin
 export const updateCourse = async (req, res, next) => {
   try {
+    // Check if valid ObjectId
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(404);
+      throw new Error('Course not found (Invalid ID)');
+    }
+
+    let course = await Course.findById(req.params.id);
+    if (!course) {
+      res.status(404);
+      throw new Error('Course not found');
+    }
+
     const courseData = { ...req.body };
 
     // Parse complex fields sent as JSON strings from FormData
@@ -94,7 +106,8 @@ export const updateCourse = async (req, res, next) => {
       }
     });
 
-    if (courseData.title && !courseData.slug) {
+    // Only generate new slug if title has actually changed
+    if (courseData.title && courseData.title !== course.title) {
       courseData.slug = slugify(courseData.title, {
         lower: true,
         strict: true,
@@ -106,16 +119,12 @@ export const updateCourse = async (req, res, next) => {
       courseData.image = result.secure_url;
     }
 
-    const course = await Course.findByIdAndUpdate(req.params.id, courseData, {
+    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, courseData, {
       new: true,
       runValidators: true,
     });
 
-    if (!course) {
-      res.status(404);
-      throw new Error('Course not found');
-    }
-    res.json({ success: true, data: course });
+    res.json({ success: true, data: updatedCourse });
   } catch (error) {
     next(error);
   }

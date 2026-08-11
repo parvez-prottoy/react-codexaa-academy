@@ -11,16 +11,10 @@ import upload from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(getCourses)
-  .post(upload.single('image'), createCourse);
+router.route('/').get(getCourses).post(upload.single('image'), createCourse);
 
-router.route('/:slug').get(getCourseBySlug);
-
-router
-  .route('/:id')
-  .put(upload.single('image'), updateCourse)
-  .delete(deleteCourse);
+router.get('/:slug', getCourseBySlug);
+router.put('/:id', upload.single('image'), updateCourse);
+router.delete('/:id', deleteCourse);
 
 export default router;
