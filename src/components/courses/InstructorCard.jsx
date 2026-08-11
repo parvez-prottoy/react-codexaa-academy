@@ -1,4 +1,5 @@
-import { HiAcademicCap, HiSparkles } from "react-icons/hi2";
+import { HiAcademicCap, HiSparkles } from 'react-icons/hi2';
+import instrustorImage from '/israfil.jpg';
 
 export default function InstructorCard({ course }) {
   if (!course) return null;
@@ -16,9 +17,9 @@ export default function InstructorCard({ course }) {
         {/* Photo */}
         <div className="relative shrink-0">
           <img
-            src={course.instructorImage}
+            src={instrustorImage}
             alt={course.instructor}
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border-2 border-white shadow-md"
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-top border-2 border-white shadow-md"
           />
           <div className="absolute -bottom-2 -right-2 p-1.5 rounded-full bg-[#2470A8] text-white shadow-xs">
             <HiSparkles size={14} />
@@ -37,7 +38,7 @@ export default function InstructorCard({ course }) {
           </div>
 
           <span className="inline-block px-3 py-1 rounded-full bg-blue-100/70 text-slate-700 text-xs font-semibold">
-            ⭐ {course.instructorExperience || "Senior Software Mentor"}
+            ⭐ {course.instructorExperience || 'Senior Software Mentor'}
           </span>
 
           <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal pt-1">

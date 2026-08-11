@@ -1,10 +1,8 @@
-import { useMemo } from 'react';
 import {
   HiAcademicCap,
   HiArrowLeft,
   HiArrowRight,
   HiBriefcase,
-  HiCheckBadge,
   HiClock,
   HiStar,
   HiUserGroup,
@@ -172,8 +170,18 @@ export default function CourseDetails() {
                 <div className="flex items-center gap-3.5 text-sm font-bold text-emerald-900 bg-linear-to-r from-emerald-50 via-teal-50/50 to-emerald-50/30 p-4 rounded-2xl border border-emerald-100/60 shadow-[0_2px_10px_rgba(16,185,129,0.04)]">
                   <div className="relative w-6 h-6 rounded-full bg-linear-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(16,185,129,0.3)]">
                     <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-20"></div>
-                    <svg className="w-3.5 h-3.5 text-white relative z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-3.5 h-3.5 text-white relative z-10"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   </div>
                   <span className="leading-snug">
@@ -220,9 +228,7 @@ export default function CourseDetails() {
           )}
 
           {/* 5. Instructor Section */}
-          {course.instructor && (
-            <InstructorCard course={course} />
-          )}
+          {course.instructor && <InstructorCard course={course} />}
 
           {/* 6. Course Features & Benefits */}
           {course.features && course.features.length > 0 && (
