@@ -4,7 +4,6 @@ import {
   HiArrowRight,
   HiBriefcase,
   HiClock,
-  HiStar,
   HiUserGroup,
 } from 'react-icons/hi2';
 import { Link, useParams } from 'react-router-dom';
@@ -68,13 +67,6 @@ export default function CourseDetails() {
                 <span className="px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 font-bold backdrop-blur-md">
                   {course.category}
                 </span>
-                <div className="flex items-center gap-1.5 text-amber-300 font-bold bg-white/10 px-3 py-1 rounded-full border border-white/10">
-                  <HiStar size={16} className="fill-amber-400 text-amber-400" />
-                  <span>{course.rating}</span>
-                  <span className="text-blue-200 font-normal">
-                    ({course.reviewsCount} reviews)
-                  </span>
-                </div>
               </div>
 
               {/* Title */}
