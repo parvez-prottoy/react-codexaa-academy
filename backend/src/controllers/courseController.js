@@ -81,51 +81,65 @@ export const createCourse = async (req, res, next) => {
 // @access  Private/Admin
 export const updateCourse = async (req, res, next) => {
   try {
-    // Check if valid ObjectId
-    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-      res.status(404);
-      throw new Error('Course not found (Invalid ID)');
+    const { id } = req.params;
+
+    // 1. Validate ObjectId
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).json({ success: false, error: 'Invalid course ID format.' });
     }
 
-    let course = await Course.findById(req.params.id);
-    if (!course) {
-      res.status(404);
-      throw new Error('Course not found');
+    // 2. Find existing course to verify it exists and check old values
+    const existingCourse = await Course.findById(id);
+    if (!existingCourse) {
+      return res.status(404).json({ success: false, error: 'Course not found in database.' });
     }
 
+    // 3. Extract body data
     const courseData = { ...req.body };
 
-    // Parse complex fields sent as JSON strings from FormData
-    ['learningOutcomes', 'curriculum', 'features', 'faq'].forEach((field) => {
+    // 4. Safely parse JSON stringified arrays from FormData
+    const jsonFields = ['learningOutcomes', 'curriculum', 'features', 'faq'];
+    jsonFields.forEach((field) => {
       if (courseData[field] && typeof courseData[field] === 'string') {
         try {
           courseData[field] = JSON.parse(courseData[field]);
-        } catch (e) {
-          console.error(`Error parsing ${field}:`, e);
+        } catch (err) {
+          console.error(`Failed to parse ${field}:`, err);
+          // If parsing fails, remove it so we don't overwrite with corrupted data
+          delete courseData[field];
         }
       }
     });
 
-    // Only generate new slug if title has actually changed
-    if (courseData.title && courseData.title !== course.title) {
+    // 5. Smart Slug Update: Only change slug if title actually changed
+    if (courseData.title && courseData.title.trim() !== existingCourse.title) {
       courseData.slug = slugify(courseData.title, {
         lower: true,
         strict: true,
       });
     }
 
+    // 6. Handle Image Upload via Cloudinary (if a new file was uploaded)
     if (req.file) {
-      const result = await uploadToCloudinary(req.file.buffer, 'courses');
-      courseData.image = result.secure_url;
+      try {
+        const result = await uploadToCloudinary(req.file.buffer, 'courses');
+        courseData.image = result.secure_url;
+      } catch (uploadError) {
+        console.error("Cloudinary Upload Error:", uploadError);
+        return res.status(500).json({ success: false, error: 'Image upload failed.' });
+      }
     }
 
-    const updatedCourse = await Course.findByIdAndUpdate(req.params.id, courseData, {
-      new: true,
-      runValidators: true,
-    });
+    // 7. Update Course using explicit $set to prevent document replacement bugs
+    const updatedCourse = await Course.findByIdAndUpdate(
+      id,
+      { $set: courseData },
+      { new: true, runValidators: true }
+    );
 
-    res.json({ success: true, data: updatedCourse });
+    res.status(200).json({ success: true, data: updatedCourse });
   } catch (error) {
+    console.error("Update Course Error:", error);
     next(error);
   }
 };
