@@ -54,7 +54,7 @@
               </td>
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onclick="openModal('<%= item._id %>', <%= JSON.stringify(item) %>)" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors" title="Edit">
+                  <button onclick="openEditModal(this)" data-id="<%= item._id %>" data-item="<%= encodeURIComponent(JSON.stringify(item)) %>" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors" title="Edit">
                     <i data-lucide="edit-2" class="w-4 h-4"></i>
                   </button>
                   <button onclick="deleteItem('<%= item._id %>')" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors" title="Delete">
@@ -132,6 +132,18 @@
   const panel = document.getElementById('modalPanel');
   const form = document.getElementById('itemForm');
   let currentMode = 'create';
+
+  function openEditModal(btn) {
+    const id = btn.getAttribute('data-id');
+    try {
+      const itemStr = decodeURIComponent(btn.getAttribute('data-item'));
+      const itemData = JSON.parse(itemStr);
+      openModal(id, itemData);
+    } catch (e) {
+      console.error("Failed to parse item data:", e);
+      showToast("Error opening data", "error");
+    }
+  }
 
   function openModal(id = null, data = null) {
     modal.classList.remove('hidden');
