@@ -101,7 +101,8 @@ export default function ReviewSlider() {
                 onSwiper={setSwiperInstance}
                 onRealIndexChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                loop={true}
+                loop={reviewData.length >= 4}
+                initialSlide={0}
                 centeredSlides={true}
                 slidesPerView={1}
                 spaceBetween={20}

@@ -97,6 +97,7 @@ export default function HeroSlider() {
           pauseOnMouseEnter: true,
         }}
         loop={true}
+        initialSlide={0}
         keyboard={{ enabled: true, onlyInViewport: true }}
         a11y={{
           prevSlideMessage: 'Previous slide',

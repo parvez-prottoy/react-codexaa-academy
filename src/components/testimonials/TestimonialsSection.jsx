@@ -207,7 +207,8 @@ export default function TestimonialsSection() {
               effect="coverflow"
               grabCursor={true}
               centeredSlides={true}
-              loop={true}
+              loop={testimonials.length >= 4}
+              initialSlide={0}
               speed={700}
               autoplay={{
                 delay: 5000,
