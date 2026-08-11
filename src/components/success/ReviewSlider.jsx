@@ -99,6 +99,7 @@ export default function ReviewSlider() {
               <Swiper
                 modules={[Autoplay, Keyboard, A11y]}
                 onSwiper={setSwiperInstance}
+                onRealIndexChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 loop={true}
                 centeredSlides={true}

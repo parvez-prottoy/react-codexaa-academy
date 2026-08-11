@@ -105,7 +105,8 @@ export default function HeroSlider() {
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
-        onActiveIndexChange={handleActiveIndexChange}
+        onRealIndexChange={handleActiveIndexChange}
+        onSlideChange={handleActiveIndexChange}
         className="hero-swiper"
       >
         {slides.map((slide, index) => (
