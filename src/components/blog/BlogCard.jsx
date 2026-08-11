@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { HiArrowRight, HiCalendar, HiClock } from "react-icons/hi2";
+import { optimizeImage } from "../../utils/optimizeImage";
 
 export default function BlogCard({ blog }) {
   if (!blog) return null;
@@ -9,7 +10,7 @@ export default function BlogCard({ blog }) {
       {/* Cover Image Container */}
       <div className="relative h-52 sm:h-60 overflow-hidden bg-slate-100">
         <img
-          src={blog.coverImage}
+          src={optimizeImage(blog.coverImage)}
           alt={blog.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
           loading="lazy"

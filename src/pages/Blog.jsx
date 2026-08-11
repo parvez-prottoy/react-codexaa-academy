@@ -7,6 +7,7 @@ import CTASection from '../components/blog/CTASection';
 import FeaturedBlog from '../components/blog/FeaturedBlog';
 import { blogCategories } from '../data/blogData';
 import useFetch from '../hooks/useFetch';
+import SEO from '../components/common/SEO';
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -41,6 +42,10 @@ export default function Blog() {
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
+      <SEO 
+        title="Engineering Blog"
+        description="Insights, tutorials, and deep dives into software engineering, web development, and tech trends by Codexaa Academy."
+      />
       {/* 1. Hero Section */}
       <BlogHero />
 

@@ -5,10 +5,12 @@ import FooterCTA from '../components/footer/FooterCTA';
 import HeroSlider from '../components/hero/HeroSlider';
 import TestimonialsSection from '../components/testimonials/TestimonialsSection';
 import TrustedCompanies from '../components/trusted/TrustedCompanies';
+import SEO from '../components/common/SEO';
 
 export default function Home() {
   return (
     <>
+      <SEO />
       {/* Sticky navbar offset: 36px announcement + 72px nav = 108px */}
       <div className="pt-15 md:pt-27">
         <HeroSlider />

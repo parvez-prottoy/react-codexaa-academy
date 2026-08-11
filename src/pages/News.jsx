@@ -4,6 +4,7 @@ import NewsGrid from '../components/news/NewsGrid';
 import NewsHero from '../components/news/NewsHero';
 import useFetch from '../hooks/useFetch';
 import { useMemo } from 'react';
+import SEO from '../components/common/SEO';
 
 export default function News() {
   const { data: news, loading, error } = useFetch('/news');
@@ -21,6 +22,10 @@ export default function News() {
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
+      <SEO 
+        title="Academy News & Announcements"
+        description="Stay up to date with the latest news, announcements, and events from Codexaa Academy."
+      />
       <NewsHero />
 
       {loading ? (

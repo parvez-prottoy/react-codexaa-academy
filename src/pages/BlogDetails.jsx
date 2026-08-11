@@ -11,6 +11,8 @@ import { Link, useParams } from 'react-router-dom';
 import BlogCard from '../components/blog/BlogCard';
 import CTASection from '../components/blog/CTASection';
 import useFetch from '../hooks/useFetch';
+import SEO from '../components/common/SEO';
+import { optimizeImage } from '../utils/optimizeImage';
 
 export default function BlogDetails() {
   const { slug } = useParams();
@@ -49,6 +51,11 @@ export default function BlogDetails() {
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
+      <SEO 
+        title={blog.title}
+        description={blog.excerpt}
+        image={blog.coverImage}
+      />
       {/* 1. Header / Breadcrumbs */}
       <section className="bg-white border-b border-slate-200/80 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -128,9 +135,10 @@ export default function BlogDetails() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div className="rounded-3xl overflow-hidden shadow-2xl shadow-slate-200 max-h-[460px] bg-slate-100">
           <img
-            src={blog.coverImage}
+            src={optimizeImage(blog.coverImage)}
             alt={blog.title}
             className="w-full h-full object-cover"
+            loading="eager"
           />
         </div>
       </div>

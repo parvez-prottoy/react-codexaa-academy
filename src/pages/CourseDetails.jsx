@@ -13,6 +13,8 @@ import CurriculumAccordion from '../components/courses/CurriculumAccordion';
 import FAQSection from '../components/courses/FAQSection';
 import InstructorCard from '../components/courses/InstructorCard';
 import LearningOutcomes from '../components/courses/LearningOutcomes';
+import SEO from '../components/common/SEO';
+import { optimizeImage } from '../utils/optimizeImage';
 import useFetch from '../hooks/useFetch';
 
 export default function CourseDetails() {
@@ -38,6 +40,11 @@ export default function CourseDetails() {
 
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
+      <SEO 
+        title={course.title}
+        description={course.shortDescription}
+        image={course.image}
+      />
       {/* 1. Course Detail Hero Section */}
       <section className="relative bg-linear-to-b from-slate-900 via-[#19264F] to-[#2470A8] text-white py-12 sm:py-16 overflow-hidden">
         {/* Ambient decorative blobs */}
@@ -129,9 +136,10 @@ export default function CourseDetails() {
                 {/* Course Cover Preview */}
                 <div className="relative rounded-2xl overflow-hidden h-52 bg-slate-100">
                   <img
-                    src={course.image}
+                    src={optimizeImage(course.image)}
                     alt={course.title}
                     className="w-full h-full object-cover"
+                    loading="eager"
                   />
                   <div className="absolute inset-0 bg-slate-900/10" />
                 </div>

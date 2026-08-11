@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { optimizeImage } from "../../utils/optimizeImage";
 import {
   HiArrowRight,
   HiClock,
@@ -30,7 +31,7 @@ export default function CourseCard({ course }) {
         className="relative h-48 sm:h-52 overflow-hidden bg-slate-100 block shrink-0"
       >
         <img
-          src={course.image}
+          src={optimizeImage(course.image)}
           alt={title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
           loading="lazy"

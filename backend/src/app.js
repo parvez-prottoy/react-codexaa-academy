@@ -43,10 +43,12 @@ import courseRoutes from './routes/courseRoutes.js';
 import newsRoutes from './routes/newsRoutes.js';
 import successStoryRoutes from './routes/successStoryRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
+import seoRoutes from './routes/seoRoutes.js';
 
 // Admin View Routes
 app.use('/admin', adminRoutes);
 
+app.use('/api/v1/seo', seoRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/news', newsRoutes);

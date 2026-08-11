@@ -4,10 +4,15 @@ import ReviewSlider from '../components/success/ReviewSlider';
 import StatisticsSection from '../components/success/StatisticsSection';
 import SuccessHero from '../components/success/SuccessHero';
 import VideoTestimonials from '../components/success/VideoTestimonials';
+import SEO from '../components/common/SEO';
 
 export default function SuccessStories() {
   return (
     <div className="pt-15 md:pt-27 min-h-screen bg-slate-50/50">
+      <SEO 
+        title="Student Success Stories"
+        description="Read real success stories and reviews from Codexaa Academy graduates who transformed their careers."
+      />
       {/* 1. Hero Section */}
       <SuccessHero />
 
