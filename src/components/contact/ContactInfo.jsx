@@ -101,7 +101,7 @@ export default function ContactInfo() {
             >
               {/* Icon Bubble */}
               <div
-                className={`w-11 h-11 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}
+                className={`w-11 h-11 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300`}
               >
                 <Icon size={22} />
               </div>

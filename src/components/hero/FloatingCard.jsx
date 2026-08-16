@@ -1,4 +1,3 @@
-/* Reusable glassmorphism floating card for hero slides */
 export default function FloatingCard({
   icon: Icon,
   label,

@@ -288,10 +288,10 @@ export default function ContactForm() {
                   key={pill}
                   type="button"
                   onClick={() => selectCoursePill(pill)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer border ${
                     formData.course === pill
-                      ? "bg-[#2470A8] text-white shadow-xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-blue-50 hover:text-[#2470A8]"
+                      ? "bg-[#2470A8] text-white border-[#2470A8] shadow-xs"
+                      : "bg-slate-50 text-slate-600 border-slate-200/60 hover:bg-blue-50 hover:text-[#2470A8] hover:border-blue-200/60"
                   }`}
                 >
                   {pill}
