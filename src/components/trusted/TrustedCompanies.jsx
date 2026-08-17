@@ -3,7 +3,6 @@ import { HiArrowRight, HiHandRaised } from 'react-icons/hi2';
 import { Link } from 'react-router-dom';
 import { companies, sectionStats } from '../../data/companyData';
 import useInView from '../../hooks/useInView';
-import CompanyCard from './CompanyCard';
 import StatsCard from './StatsCard';
 
 /* ─── Decorative background layer ─── */
@@ -148,7 +147,9 @@ export default function TrustedCompanies() {
   const [statsRef, statsInView] = useInView(0.15);
   const [gridRef, gridInView] = useInView(0.1);
 
-  const international = companies ? companies.filter((c) => c.category === 'international') : [];
+  const international = companies
+    ? companies.filter((c) => c.category === 'international')
+    : [];
 
   return (
     <section
@@ -186,29 +187,6 @@ export default function TrustedCompanies() {
 
         {/* ── Divider ── */}
         <Divider label="Our Hiring Partners" />
-
-        {/* ── Company grids ── */}
-        <div ref={gridRef}>
-          {/* International companies */}
-          {/* <CategoryLabel label="International Companies" color="#2B7CAD" /> */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-10">
-            {international && international.length > 0 ? (
-              international.map((company, i) => (
-                <div
-                  key={company._id || company.id}
-                  className={`transition-all duration-500 ${
-                    gridInView
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{ transitionDelay: gridInView ? `${i * 60}ms` : '0ms' }}
-                >
-                  <CompanyCard company={company} />
-                </div>
-              ))
-            ) : null}
-          </div>
-        </div>
 
         {/* ── Bottom CTA strip ── */}
         <div
