@@ -3,11 +3,11 @@
 import { HiAcademicCap, HiBuildingOffice2, HiStar } from 'react-icons/hi2';
 
 /* ── Company logo imports ── */
-import logoDreamOnline from '../assets/logos/dreamonline.svg';
-import logoNttData from '../assets/logos/ntt-data.svg';
-import logoToshiba from '../assets/logos/toshiba.svg';
-import logoUltraX from '../assets/logos/ultra-x.svg';
-import logoVirtualex from '../assets/logos/virtualex.svg';
+import logoNttData from '../assets/logos/bdtask-logo.webp';
+import logoDreamOnline from '../assets/logos/brain-station.webp';
+import logoToshiba from '../assets/logos/soft-bd.png';
+import logoUltraX from '../assets/logos/southtech.svg';
+import logoVirtualex from '../assets/logos/vivasoft.svg';
 
 /* ── Hiring partner companies ── */
 export const companies = [

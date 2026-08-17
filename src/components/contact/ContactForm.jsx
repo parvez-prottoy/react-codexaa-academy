@@ -3,37 +3,17 @@ import {
   HiUser,
   HiEnvelope,
   HiPhone,
-  HiAcademicCap,
   HiChatBubbleBottomCenterText,
   HiArrowRight,
   HiCheckCircle,
   HiSparkles,
 } from "react-icons/hi2";
 
-const coursesOptions = [
-  "Software Development",
-  "Web Development",
-  "Mobile App Development",
-  "UI/UX Design",
-  "Data Science",
-  "Cyber Security",
-  "DevOps & Cloud",
-  "AI & Machine Learning",
-];
-
-const popularPills = [
-  "Web Development",
-  "Software Development",
-  "UI/UX Design",
-  "AI & Machine Learning",
-];
-
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     phone: "",
-    course: "",
     subject: "",
     message: "",
   });
@@ -50,12 +30,7 @@ export default function ContactForm() {
     }
   };
 
-  const selectCoursePill = (courseName) => {
-    setFormData((prev) => ({ ...prev, course: courseName }));
-    if (errors.course) {
-      setErrors((prev) => ({ ...prev, course: "" }));
-    }
-  };
+
 
   const validate = () => {
     const newErrors = {};
@@ -66,7 +41,6 @@ export default function ContactForm() {
       newErrors.email = "Please enter a valid email address";
     }
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
-    if (!formData.course) newErrors.course = "Please select a course";
     if (!formData.subject.trim()) newErrors.subject = "Subject is required";
     if (!formData.message.trim()) newErrors.message = "Message is required";
 
@@ -86,7 +60,6 @@ export default function ContactForm() {
         fullName: "",
         email: "",
         phone: "",
-        course: "",
         subject: "",
         message: "",
       });
@@ -109,7 +82,7 @@ export default function ContactForm() {
           </span>
         </div>
         <p className="text-xs sm:text-sm text-slate-500 mt-1.5">
-          Fill out the details below and our admissions team will contact you within 2 hours.
+          Fill out the form below and our team will get back to you as soon as possible.
         </p>
       </div>
 
@@ -202,7 +175,6 @@ export default function ContactForm() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {/* Phone Number */}
             <div>
               <label
@@ -235,70 +207,6 @@ export default function ContactForm() {
                 </p>
               )}
             </div>
-
-            {/* Course Interested In */}
-            <div>
-              <label
-                htmlFor="course"
-                className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5"
-              >
-                Course Interested In <span className="text-red-500">*</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <HiAcademicCap size={18} />
-                </div>
-                <select
-                  id="course"
-                  name="course"
-                  value={formData.course}
-                  onChange={handleChange}
-                  className={`w-full pl-10 pr-4 py-3 rounded-xl border text-sm text-slate-900 bg-slate-50/60 focus:bg-white focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${
-                    errors.course
-                      ? "border-red-400 focus:ring-2 focus:ring-red-200"
-                      : "border-slate-200 focus:border-[#3695d0] focus:ring-2 focus:ring-blue-100"
-                  }`}
-                >
-                  <option value="" disabled>
-                    Select a Course
-                  </option>
-                  {coursesOptions.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {errors.course && (
-                <p className="text-xs text-red-500 mt-1 font-medium">
-                  {errors.course}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Quick select pills */}
-          <div className="space-y-1.5">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-              Quick Pick Course:
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {popularPills.map((pill) => (
-                <button
-                  key={pill}
-                  type="button"
-                  onClick={() => selectCoursePill(pill)}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 cursor-pointer border ${
-                    formData.course === pill
-                      ? "bg-[#2470A8] text-white border-[#2470A8] shadow-xs"
-                      : "bg-slate-50 text-slate-600 border-slate-200/60 hover:bg-blue-50 hover:text-[#2470A8] hover:border-blue-200/60"
-                  }`}
-                >
-                  {pill}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Subject */}
           <div>

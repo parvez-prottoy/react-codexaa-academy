@@ -46,7 +46,7 @@ const contactItems = [
     id: "hours",
     icon: HiClock,
     title: "Office Hours",
-    value: "Sun – Thu: 10:00 AM – 6:00 PM",
+    value: "Sun – Thu: 10AM – 6PM",
     href: null,
     external: false,
     color: "text-[#2470A8]",
@@ -57,7 +57,7 @@ const contactItems = [
     id: "website",
     icon: HiGlobeAlt,
     title: "Website",
-    value: "www.codexaa.com",
+    value: "codexaa.com",
     href: "https://www.codexaa.com",
     external: true,
     color: "text-cyan-600",
@@ -78,26 +78,29 @@ const contactItems = [
 ];
 
 export default function ContactInfo() {
+  const primaryItems = contactItems.slice(0, 3);
+  const secondaryItems = contactItems.slice(3, 6);
+
   return (
-    <div className="space-y-4">
-      <div className="mb-6">
+    <div className="space-y-6">
+      <div className="mb-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Get in Touch
         </h2>
-        <p className="text-sm text-slate-600 mt-2">
-          Connect with us directly through any of our official channels below or
-          visit our campus in Dhaka.
+        <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+          Connect with our team through any of the channels below. We're here to help you with admissions, courses, and general inquiries.
         </p>
       </div>
 
+      {/* Primary Contact Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-        {contactItems.map((item) => {
+        {primaryItems.map((item) => {
           const Icon = item.icon;
           const isLink = Boolean(item.href);
 
           const CardContent = (
             <div
-              className={`group flex items-start gap-4 p-4 sm:p-5 rounded-2xl bg-white border ${item.borderColor} shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative`}
+              className={`group flex items-start gap-4 p-4 rounded-2xl bg-white border ${item.borderColor} shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative h-full`}
             >
               {/* Icon Bubble */}
               <div
@@ -140,7 +143,47 @@ export default function ContactInfo() {
             );
           }
 
-          return <div key={item.id}>{CardContent}</div>;
+          return <div key={item.id} className="h-full">{CardContent}</div>;
+        })}
+      </div>
+
+      {/* Secondary Compact Info Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {secondaryItems.map((item) => {
+          const Icon = item.icon;
+          const isLink = Boolean(item.href);
+
+          const CardContent = (
+            <div
+              className={`group flex flex-col p-3 rounded-xl bg-slate-50 border border-slate-100 shadow-[inset_0_1px_2px_rgba(255,255,255,0.5)] hover:shadow-sm hover:border-blue-200/60 hover:bg-white transition-all duration-300 h-full justify-center items-center text-center`}
+            >
+              <div className={`mb-1.5 ${item.color} group-hover:scale-110 transition-transform duration-300`}>
+                <Icon size={18} />
+              </div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
+                {item.title}
+              </h3>
+              <p className="text-xs font-semibold text-slate-700 leading-tight group-hover:text-[#3695d0] transition-colors duration-200">
+                {item.value}
+              </p>
+            </div>
+          );
+
+          if (isLink) {
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
+                className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:rounded-xl"
+              >
+                {CardContent}
+              </a>
+            );
+          }
+
+          return <div key={item.id} className="h-full">{CardContent}</div>;
         })}
       </div>
     </div>

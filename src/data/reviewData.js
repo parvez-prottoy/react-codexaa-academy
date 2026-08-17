@@ -1,9 +1,11 @@
-import logoBjit from '../assets/logos/bjit.svg';
-import logoBrainStation23 from '../assets/logos/brainstation23.svg';
-import logoGrameenphone from '../assets/logos/grameenphone.svg';
-import logoKazSoftware from '../assets/logos/kaz-software.svg';
-import logoNttData from '../assets/logos/ntt-data.svg';
-import logoTechnext from '../assets/logos/technext.svg';
+import {
+  default as logoBjit,
+  default as logoTechnext,
+} from '../assets/logos/bdtask-logo.webp';
+import logoBrainStation23 from '../assets/logos/brain-station.webp';
+import logoGrameenphone from '../assets/logos/soft-bd.png';
+import logoKazSoftware from '../assets/logos/southtech.svg';
+import logoNttData from '../assets/logos/vivasoft.svg';
 
 export const reviewData = [
   {

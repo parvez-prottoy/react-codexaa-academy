@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
-  Autoplay,
   Navigation,
   Pagination,
   Keyboard,
@@ -198,7 +197,6 @@ export default function TestimonialsSection() {
           ) : testimonials && testimonials.length > 0 ? (
             <Swiper
               modules={[
-                Autoplay,
                 Navigation,
                 Pagination,
                 Keyboard,
@@ -208,13 +206,8 @@ export default function TestimonialsSection() {
               grabCursor={true}
               centeredSlides={true}
               loop={testimonials.length >= 4}
-              initialSlide={0}
+              initialSlide={1}
               speed={700}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }}
               keyboard={{
                 enabled: true,
               }}
