@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { HiArrowRight, HiChevronDown } from 'react-icons/hi2';
+import {
+  HiArrowRight,
+  HiChevronDown,
+  HiUser,
+  HiAcademicCap,
+  HiArrowRightOnRectangle,
+} from 'react-icons/hi2';
 import { Link, NavLink as RouterNavLink, useLocation } from 'react-router-dom';
 
 import navLogo from '../assets/logo.png';
 import { navLinks } from '../data/navigationData';
 import DropdownMenu from './DropdownMenu';
 import MobileMenu from './MobileMenu';
+import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
 
 /* ─── Animated Hamburger Icon ─── */
 function HamburgerIcon({ isOpen }) {
@@ -103,9 +111,27 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const location = useLocation();
 
+  const { user, isAuthenticated, logout } = useAuth();
+  const toast = useToast();
+
   const dropdownTimeoutRef = useRef(null);
+  const profileMenuRef = useRef(null);
+
+  /* ── Close profile menu on outside click ── */
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+    if (isProfileMenuOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [isProfileMenuOpen]);
 
   /* ── Scroll listener ── */
   useEffect(() => {
@@ -160,8 +186,12 @@ export default function Navbar() {
   }, []);
 
   /* ── Close dropdown automatically on route change ── */
+  const prevPathRef = useRef(location.pathname);
   useEffect(() => {
-    closeDropdown();
+    if (prevPathRef.current !== location.pathname) {
+      prevPathRef.current = location.pathname;
+      closeDropdown();
+    }
   }, [location.pathname, closeDropdown]);
 
   /* ── Mobile: close the drawer (stable identity for a11y hooks) ── */
@@ -258,25 +288,96 @@ export default function Navbar() {
 
           {/* ── Desktop CTA Area ── */}
           <div className="hidden lg:flex items-center gap-3">
-            {/* Enroll CTA */}
-            <Link
-              to="/contact"
-              className="
-                group flex items-center gap-2 px-5 py-2.5 rounded-full
-                bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]
-                text-white text-sm font-bold
-                shadow-md shadow-blue-200
-                hover:shadow-lg hover:shadow-blue-300 hover:-translate-y-0.5
-                transition-all duration-200
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-              "
-            >
-              Contact Us
-              <HiArrowRight
-                size={15}
-                className="group-hover:translate-x-0.5 transition-transform duration-200"
-              />
-            </Link>
+            {isAuthenticated && user ? (
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full hover:bg-slate-100 transition-colors border border-slate-200/80 cursor-pointer select-none"
+                  aria-expanded={isProfileMenuOpen}
+                >
+                  <div className="w-8 h-8 rounded-full bg-linear-to-tr from-[#2470A8] to-[#5BAFE6] text-white flex items-center justify-center text-xs font-black shadow-xs">
+                    {user.name ? user.name.charAt(0).toUpperCase() : <HiUser size={14} />}
+                  </div>
+                  <span className="text-xs font-bold text-slate-700 max-w-[120px] truncate">
+                    {user.name}
+                  </span>
+                  <HiChevronDown
+                    size={13}
+                    className={`text-slate-400 transition-transform duration-200 ${
+                      isProfileMenuOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {/* Profile Dropdown Menu */}
+                {isProfileMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white shadow-xl border border-slate-200/80 p-2 z-50 animate-fadeIn space-y-1">
+                    <div className="px-3 py-2.5 border-b border-slate-100">
+                      <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{user.email}</p>
+                    </div>
+
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-[#2470A8] transition-colors"
+                    >
+                      <HiAcademicCap size={16} className="text-[#3695d0]" />
+                      <span>Student Dashboard</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsProfileMenuOpen(false);
+                        logout();
+                        toast.info('Signed out successfully.');
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer text-left"
+                    >
+                      <HiArrowRightOnRectangle size={16} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="px-3 py-2 text-sm font-bold text-slate-700 hover:text-[#2470A8] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-3 py-2 text-sm font-bold text-slate-700 hover:text-[#2470A8] transition-colors"
+                >
+                  Register
+                </Link>
+
+                {/* Contact Us CTA (only for unauthenticated users) */}
+                <Link
+                  to="/contact"
+                  className="
+                    group flex items-center gap-2 px-5 py-2.5 rounded-full
+                    bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]
+                    text-white text-sm font-bold
+                    shadow-md shadow-blue-200
+                    hover:shadow-lg hover:shadow-blue-300 hover:-translate-y-0.5
+                    transition-all duration-200
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
+                  "
+                >
+                  Contact Us
+                  <HiArrowRight
+                    size={15}
+                    className="group-hover:translate-x-0.5 transition-transform duration-200"
+                  />
+                </Link>
+              </>
+            )}
           </div>
 
           {/* ── Mobile hamburger ── */}

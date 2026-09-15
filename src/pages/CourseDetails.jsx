@@ -1,12 +1,14 @@
+import { useEffect, useState } from 'react';
 import {
   HiAcademicCap,
   HiArrowLeft,
   HiArrowRight,
   HiBriefcase,
+  HiCheckCircle,
   HiClock,
   HiUserGroup,
 } from 'react-icons/hi2';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import CourseFeatures from '../components/courses/CourseFeatures';
 import CourseOverview from '../components/courses/CourseOverview';
 import CurriculumAccordion from '../components/courses/CurriculumAccordion';
@@ -16,11 +18,72 @@ import LearningOutcomes from '../components/courses/LearningOutcomes';
 import SEO from '../components/common/SEO';
 import { optimizeImage } from '../utils/optimizeImage';
 import useFetch from '../hooks/useFetch';
+import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
+import api from '../services/api';
 
 export default function CourseDetails() {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  const toast = useToast();
 
+  const [isEnrolling, setIsEnrolling] = useState(false);
   const { data: course, loading, error } = useFetch(`/courses/${slug}`);
+
+  // Check payment callback messages in URL
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment');
+    if (paymentStatus === 'failed') {
+      toast.error('Payment failed. Please try again or use another payment method.');
+    } else if (paymentStatus === 'cancelled') {
+      toast.info('Payment was cancelled.');
+    } else if (paymentStatus === 'error') {
+      toast.error('There was an issue processing your payment.');
+    }
+  }, [searchParams, toast]);
+
+  // Check if current user is already enrolled
+  const isAlreadyEnrolled = user?.enrolledCourses?.some((c) => {
+    const id = typeof c === 'object' && c !== null ? c._id || c.id : c;
+    return id === course?._id;
+  });
+
+  const handleEnrollNow = async () => {
+    if (!isAuthenticated || !user) {
+      toast.info('Please login to enroll in this course.');
+      navigate(`/login?callbackUrl=/course/${slug}`);
+      return;
+    }
+
+    if (isAlreadyEnrolled) {
+      toast.info('You are already enrolled in this course!');
+      navigate('/dashboard');
+      return;
+    }
+
+    try {
+      setIsEnrolling(true);
+      const res = await api.post('/payment/init', {
+        courseId: course._id,
+        slug: course.slug,
+      });
+
+      if (res.data?.GatewayPageURL) {
+        toast.info('Securing connection to SSLCommerz...');
+        window.location.href = res.data.GatewayPageURL;
+      } else {
+        toast.error('Could not start checkout. Please try again.');
+      }
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || 'Enrollment checkout failed';
+      toast.error(msg);
+    } finally {
+      setIsEnrolling(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -191,13 +254,34 @@ export default function CourseDetails() {
 
                 {/* Primary CTA Buttons */}
                 <div className="space-y-4 pt-1">
-                  <Link
-                    to="/contact"
-                    className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#3989c6] hover:bg-[#2c75aa] text-white text-base font-bold shadow-[0_10px_25px_rgba(57,137,198,0.3)] hover:shadow-[0_15px_30px_rgba(57,137,198,0.4)] hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    <span>Enroll Now</span>
-                    <HiArrowRight size={18} strokeWidth={1} />
-                  </Link>
+                  {isAlreadyEnrolled ? (
+                    <Link
+                      to="/dashboard"
+                      className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-base font-bold shadow-md hover:-translate-y-0.5 transition-all duration-300"
+                    >
+                      <HiCheckCircle size={20} />
+                      <span>Already Enrolled • Go to Dashboard</span>
+                    </Link>
+                  ) : isEnrolling ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#3989c6] text-white text-base font-bold opacity-80 cursor-wait shadow-md"
+                    >
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Securing Checkout...</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleEnrollNow}
+                      className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-full bg-[#3989c6] hover:bg-[#2c75aa] text-white text-base font-bold shadow-[0_10px_25px_rgba(57,137,198,0.3)] hover:shadow-[0_15px_30px_rgba(57,137,198,0.4)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                    >
+                      <span>Enroll Now</span>
+                      <HiArrowRight size={18} strokeWidth={1} />
+                    </button>
+                  )}
+
                   <Link
                     to="/contact"
                     className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-full border border-slate-200 bg-white text-base font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors duration-300"

@@ -21,12 +21,16 @@ import {
   HiServer,
   HiTrophy,
   HiXMark,
+  HiUser,
+  HiArrowRightOnRectangle,
 } from 'react-icons/hi2';
 import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 
 import navLogo from '../assets/logo.png';
 import useFocusTrap from '../hooks/useFocusTrap';
 import useLockBodyScroll from '../hooks/useLockBodyScroll';
+import { useAuth } from '../hooks/useAuth';
+import { useToast } from '../hooks/useToast';
 
 /* Social links list */
 const socialLinks = [
@@ -90,6 +94,8 @@ const mobileNavItems = [
 export default function MobileMenu({ isOpen, onClose }) {
   const drawerRef = useRef(null);
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const toast = useToast();
 
   useLockBodyScroll(isOpen);
   useFocusTrap(isOpen, drawerRef, onClose);
@@ -310,35 +316,85 @@ export default function MobileMenu({ isOpen, onClose }) {
         {/* Sticky Bottom Actions & Social Links */}
         <div className="px-5 py-4 border-t border-slate-100 space-y-3 bg-slate-50/80 backdrop-blur-md shrink-0">
           {/* Action Buttons */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <Link
-              to="/contact"
-              onClick={onClose}
-              className="
-                flex items-center justify-center gap-1.5 min-h-[46px] py-2.5 px-3 rounded-xl
-                bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]
-                text-white text-xs sm:text-sm font-bold
-                shadow-md shadow-blue-200 hover:shadow-lg
-                transition-all duration-200 active:scale-98
-              "
-            >
-              <span>Enroll Now</span>
-              <HiArrowRight size={14} />
-            </Link>
+          {isAuthenticated && user ? (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-full bg-[#2470A8] text-white flex items-center justify-center text-xs font-black shrink-0">
+                    {user.name ? user.name.charAt(0).toUpperCase() : <HiUser size={14} />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
+                    <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+                  </div>
+                </div>
+              </div>
 
-            <Link
-              to="/contact"
-              onClick={onClose}
-              className="
-                flex items-center justify-center gap-1.5 min-h-[46px] py-2.5 px-3 rounded-xl
-                border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-700
-                hover:bg-slate-50 hover:border-slate-300 active:scale-98
-                transition-all duration-200
-              "
-            >
-              <span>Contact Us</span>
-            </Link>
-          </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  to="/dashboard"
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-blue-50 text-[#2470A8] text-xs font-bold hover:bg-blue-100 transition-colors border border-blue-100"
+                >
+                  <HiAcademicCap size={15} />
+                  <span>Dashboard</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    logout();
+                    toast.info('Signed out successfully.');
+                  }}
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-100 text-rose-600 text-xs font-bold hover:bg-rose-50 transition-colors cursor-pointer"
+                >
+                  <HiArrowRightOnRectangle size={15} />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              <div className="grid grid-cols-2 gap-2.5">
+                <Link
+                  to="/login"
+                  onClick={onClose}
+                  className="
+                    flex items-center justify-center gap-1.5 min-h-[46px] py-2.5 px-3 rounded-xl
+                    bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]
+                    text-white text-xs sm:text-sm font-bold
+                    shadow-md shadow-blue-200 hover:shadow-lg
+                    transition-all duration-200 active:scale-98
+                  "
+                >
+                  <span>Sign In</span>
+                  <HiArrowRight size={14} />
+                </Link>
+
+                <Link
+                  to="/register"
+                  onClick={onClose}
+                  className="
+                    flex items-center justify-center gap-1.5 min-h-[46px] py-2.5 px-3 rounded-xl
+                    border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-700
+                    hover:bg-slate-50 hover:border-slate-300 active:scale-98
+                    transition-all duration-200
+                  "
+                >
+                  <span>Register</span>
+                </Link>
+              </div>
+
+              {/* Contact Us (only for unauthenticated users) */}
+              <Link
+                to="/contact"
+                onClick={onClose}
+                className="flex items-center justify-center gap-1.5 w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+              >
+                <span>Contact Us</span>
+              </Link>
+            </div>
+          )}
 
           {/* Circular Social Links */}
           <div className="flex items-center justify-center gap-3 pt-1">

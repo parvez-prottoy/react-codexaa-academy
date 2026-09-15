@@ -44,12 +44,15 @@ import newsRoutes from './routes/newsRoutes.js';
 import successStoryRoutes from './routes/successStoryRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
 import seoRoutes from './routes/seoRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 
 // Admin View Routes
 app.use('/admin', adminRoutes);
 
 app.use('/api/v1/seo', seoRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/users', authRoutes);
+app.use('/api/v1/payment', paymentRoutes);
 app.use('/api/v1/courses', courseRoutes);
 app.use('/api/v1/news', newsRoutes);
 app.use('/api/v1/blogs', blogRoutes);
