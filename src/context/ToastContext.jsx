@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   HiCheckCircle,
   HiExclamationCircle,
@@ -17,8 +17,16 @@ export function ToastProvider({ children }) {
 
   const addToast = useCallback(
     (message, type = 'info', duration = 4000) => {
-      const id = `${Date.now()}_${Math.random()}`;
-      setToasts((prev) => [...prev, { id, message, type }]);
+      const id = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+      setToasts((prev) => {
+        // Prevent duplicate toast spam if message and type match an active toast
+        if (prev.some((t) => t.message === message && t.type === type)) {
+          return prev;
+        }
+        // Cap maximum 3 concurrent toasts for clean UI
+        return [...prev, { id, message, type }].slice(-3);
+      });
 
       if (duration > 0) {
         setTimeout(() => {
@@ -29,12 +37,15 @@ export function ToastProvider({ children }) {
     [removeToast]
   );
 
-  const toast = {
-    success: (msg, duration) => addToast(msg, 'success', duration),
-    error: (msg, duration) => addToast(msg, 'error', duration),
-    info: (msg, duration) => addToast(msg, 'info', duration),
-    warning: (msg, duration) => addToast(msg, 'warning', duration),
-  };
+  const toast = useMemo(
+    () => ({
+      success: (msg, duration) => addToast(msg, 'success', duration),
+      error: (msg, duration) => addToast(msg, 'error', duration),
+      info: (msg, duration) => addToast(msg, 'info', duration),
+      warning: (msg, duration) => addToast(msg, 'warning', duration),
+    }),
+    [addToast]
+  );
 
   return (
     <ToastContext.Provider value={toast}>

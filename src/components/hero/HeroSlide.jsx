@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { HiStar } from "react-icons/hi2";
-import HeroButtons from "./HeroButtons";
-import FloatingCard from "./FloatingCard";
+import { useEffect, useRef, useState } from 'react';
+import { HiStar } from 'react-icons/hi2';
+import HeroButtons from './HeroButtons';
 
 /* ─── Decorative background blobs ─── */
 function BackgroundBlobs({ blob1, blob2 }) {
@@ -71,11 +70,11 @@ function StatStrip({ stats }) {
 /* ─── Trust strip (avatars + rating) ─── */
 function TrustStrip() {
   const avatarColors = [
-    "bg-blue-400",
-    "bg-violet-400",
-    "bg-emerald-400",
-    "bg-amber-400",
-    "bg-rose-400",
+    'bg-blue-400',
+    'bg-violet-400',
+    'bg-emerald-400',
+    'bg-amber-400',
+    'bg-rose-400',
   ];
   return (
     <div className="flex items-center justify-center lg:justify-start gap-3">
@@ -155,7 +154,7 @@ export default function HeroSlide({ slide, isActive }) {
             {/* Heading */}
             <div className="anim-fade-up anim-d1 mb-4 sm:mb-5">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.5rem] font-extrabold leading-tight tracking-tight text-slate-900">
-                {slide.title}{" "}
+                {slide.title}{' '}
                 <span
                   className={`text-transparent bg-clip-text bg-linear-to-r from-[#5BAFE6] via-[#3695d0] to-[#2470A8]`}
                 >
@@ -211,11 +210,11 @@ export default function HeroSlide({ slide, isActive }) {
               </div>
 
               {/* Floating cards */}
-              <div className="absolute inset-0 pointer-events-none">
+              {/* <div className="absolute inset-0 pointer-events-none">
                 {slide.floatingCards.map((card, i) => (
                   <FloatingCard key={i} {...card} />
                 ))}
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -226,7 +225,7 @@ export default function HeroSlide({ slide, isActive }) {
         className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to top, rgba(255,255,255,0.8), transparent)",
+            'linear-gradient(to top, rgba(255,255,255,0.8), transparent)',
         }}
         aria-hidden="true"
       />

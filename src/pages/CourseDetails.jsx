@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   HiAcademicCap,
   HiArrowLeft,
@@ -33,16 +33,26 @@ export default function CourseDetails() {
   const { data: course, loading, error } = useFetch(`/courses/${slug}`);
 
   // Check payment callback messages in URL
+  const paymentStatus = searchParams.get('payment');
+  const hasNotifiedPaymentRef = useRef(false);
+
   useEffect(() => {
-    const paymentStatus = searchParams.get('payment');
+    if (!paymentStatus || hasNotifiedPaymentRef.current) return;
+
     if (paymentStatus === 'failed') {
+      hasNotifiedPaymentRef.current = true;
       toast.error('Payment failed. Please try again or use another payment method.');
+      navigate(`/course/${slug}`, { replace: true });
     } else if (paymentStatus === 'cancelled') {
+      hasNotifiedPaymentRef.current = true;
       toast.info('Payment was cancelled.');
+      navigate(`/course/${slug}`, { replace: true });
     } else if (paymentStatus === 'error') {
+      hasNotifiedPaymentRef.current = true;
       toast.error('There was an issue processing your payment.');
+      navigate(`/course/${slug}`, { replace: true });
     }
-  }, [searchParams, toast]);
+  }, [paymentStatus, slug, toast, navigate]);
 
   // Check if current user is already enrolled
   const isAlreadyEnrolled = user?.enrolledCourses?.some((c) => {

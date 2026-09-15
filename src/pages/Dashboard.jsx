@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   HiAcademicCap,
   HiArrowRight,
@@ -21,6 +21,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const isPaymentSuccess = searchParams.get('payment') === 'success';
+  const [showSuccessBanner] = useState(isPaymentSuccess);
+  const hasNotifiedPaymentRef = useRef(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -29,11 +31,13 @@ export default function Dashboard() {
   }, [loading, isAuthenticated, navigate]);
 
   useEffect(() => {
-    if (isPaymentSuccess) {
+    if (isPaymentSuccess && !hasNotifiedPaymentRef.current) {
+      hasNotifiedPaymentRef.current = true;
       refreshUser();
       toast.success('🎉 Congratulations! You have successfully enrolled in the course.');
+      navigate('/dashboard', { replace: true });
     }
-  }, [isPaymentSuccess, refreshUser, toast]);
+  }, [isPaymentSuccess, refreshUser, toast, navigate]);
 
   if (loading || !user) {
     return (
@@ -54,7 +58,7 @@ export default function Dashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Payment Success Banner */}
-        {isPaymentSuccess && (
+        {showSuccessBanner && (
           <div className="p-5 sm:p-6 rounded-3xl bg-linear-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fadeIn">
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shrink-0">

@@ -161,8 +161,8 @@ export const handlePaymentSuccess = async (req, res) => {
       return res.redirect(`${frontendUrl}/courses?payment=error&message=TransactionNotFound`);
     }
 
-    // Optional validation with SSLCommerz API
-    if (val_id && !payment.val_id) {
+    // Optional validation with SSLCommerz API (skip for simulated demo payments)
+    if (val_id && !payment.val_id && !val_id.startsWith('VAL_')) {
       try {
         const validateUrl = `${config.baseUrl}/validator/api/validationserverAPI.php?val_id=${val_id}&store_id=${config.store_id}&store_passwd=${config.store_passwd}&v=1&format=json`;
         const valRes = await fetch(validateUrl);
