@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { HiChevronDown, HiBookOpen, HiClock, HiCheck } from "react-icons/hi2";
+import { Lock, Play } from 'lucide-react';
+import { useState } from 'react';
+import { HiBookOpen, HiChevronDown, HiClock } from 'react-icons/hi2';
 
 export default function CurriculumAccordion({ curriculum = [] }) {
   const [openIndex, setOpenIndex] = useState(0);
@@ -37,15 +38,15 @@ export default function CurriculumAccordion({ curriculum = [] }) {
                 type="button"
                 onClick={() => toggleModule(idx)}
                 className={`w-full p-4 sm:p-5 flex items-center justify-between gap-4 text-left transition-colors cursor-pointer select-none ${
-                  isOpen ? "bg-blue-50/60" : "bg-white hover:bg-slate-50"
+                  isOpen ? 'bg-blue-50/60' : 'bg-white hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-extrabold shrink-0 ${
                       isOpen
-                        ? "bg-[#2470A8] text-white"
-                        : "bg-slate-100 text-slate-700"
+                        ? 'bg-[#2470A8] text-white'
+                        : 'bg-slate-100 text-slate-700'
                     }`}
                   >
                     {idx + 1}
@@ -65,7 +66,7 @@ export default function CurriculumAccordion({ curriculum = [] }) {
 
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-slate-400 transition-transform duration-300 ${
-                    isOpen ? "rotate-180 text-[#2470A8] bg-blue-100/60" : ""
+                    isOpen ? 'rotate-180 text-[#2470A8] bg-blue-100/60' : ''
                   }`}
                 >
                   <HiChevronDown size={18} />
@@ -78,10 +79,30 @@ export default function CurriculumAccordion({ curriculum = [] }) {
                   {module.topics.map((topic, topicIdx) => (
                     <div
                       key={topicIdx}
-                      className="flex items-start gap-3 p-2.5 rounded-xl bg-slate-50/60 text-xs sm:text-sm text-slate-700 font-medium"
+                      className="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/60 hover:bg-slate-100/70 border border-transparent hover:border-slate-200/60 transition-all group"
                     >
-                      <HiCheck size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-                      <span>{topic}</span>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#2470A8] flex items-center justify-center shrink-0">
+                          <Play
+                            size={13}
+                            className="fill-[#2470A8]/20 text-[#2470A8] ml-0.5"
+                          />
+                        </div>
+                        <span className="text-xs sm:text-sm text-slate-700 font-medium group-hover:text-slate-900 transition-colors">
+                          {topic}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center shrink-0">
+                        <button
+                          type="button"
+                          className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors"
+                          aria-label="Locked lesson"
+                          title="Locked lesson"
+                        >
+                          <Lock size={14} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
