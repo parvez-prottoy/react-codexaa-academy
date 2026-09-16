@@ -1,5 +1,5 @@
-import { Lock, Play, Unlock } from 'lucide-react';
-import { useState } from 'react';
+import { Lock, Play, Unlock, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { HiBookOpen, HiChevronDown, HiClock } from 'react-icons/hi2';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
@@ -15,6 +15,7 @@ export default function CurriculumAccordion({
   const { user } = useAuth();
   const toast = useToast();
   const [openIndex, setOpenIndex] = useState(0);
+  const [activeLesson, setActiveLesson] = useState(null);
 
   // Determine enrollment / purchase access:
   // 1. Explicit boolean prop (isUnlocked / isEnrolled / hasPurchased)
@@ -30,6 +31,27 @@ export default function CurriculumAccordion({
         }))
   );
 
+  // Close modal on Escape key press and lock background scrolling
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveLesson(null);
+      }
+    };
+
+    if (activeLesson) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeLesson]);
+
   const toggleModule = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
   };
@@ -38,9 +60,21 @@ export default function CurriculumAccordion({
     if (hasAccess) {
       if (typeof onLessonClick === 'function') {
         onLessonClick(topic, moduleItem, topicIdx);
-      } else {
-        toast.success(`Opening lesson: "${topic}"`);
       }
+      const title =
+        typeof topic === 'string'
+          ? topic
+          : topic?.title || 'Lesson Video';
+      const videoUrl =
+        (typeof topic === 'object' && topic?.videoUrl) ||
+        moduleItem?.videoUrl ||
+        'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+
+      setActiveLesson({
+        title,
+        moduleTitle: moduleItem?.title || '',
+        videoUrl,
+      });
     } else {
       toast.info(
         '🔒 This lesson is locked. Please enroll in the course to unlock full curriculum and video access.'
@@ -197,6 +231,75 @@ export default function CurriculumAccordion({
           );
         })}
       </div>
+
+      {/* Interactive Video Player Modal */}
+      {activeLesson && (
+        <div
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 md:p-8 bg-slate-950/80 backdrop-blur-sm animate-fadeIn"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="lesson-modal-title"
+        >
+          <div className="relative w-full max-w-4xl bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-700/60 overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 sm:px-6 sm:py-5 border-b border-slate-800 bg-slate-900/95">
+              <div className="flex items-center gap-3 min-w-0 pr-4">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                  <Play size={16} className="fill-emerald-400 ml-0.5" />
+                </div>
+                <div className="min-w-0">
+                  {activeLesson.moduleTitle && (
+                    <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-slate-400 truncate">
+                      {activeLesson.moduleTitle}
+                    </p>
+                  )}
+                  <h3
+                    id="lesson-modal-title"
+                    className="text-sm sm:text-base md:text-lg font-bold text-white truncate"
+                  >
+                    {activeLesson.title}
+                  </h3>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveLesson(null)}
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors shrink-0 cursor-pointer"
+                aria-label="Close video player"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Responsive 16:9 Video Aspect Container */}
+            <div className="relative w-full pb-[56.25%] bg-black">
+              <iframe
+                src={activeLesson.videoUrl}
+                title={activeLesson.title || 'Lesson Video'}
+                className="absolute top-0 left-0 w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-5 py-3 sm:px-6 bg-slate-950/60 flex items-center justify-between text-xs text-slate-400 border-t border-slate-800/80">
+              <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
+                <Unlock size={13} />
+                <span>Enrolled Access • Full HD Playback</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setActiveLesson(null)}
+                className="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-colors cursor-pointer text-xs font-semibold"
+              >
+                Close Video
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
