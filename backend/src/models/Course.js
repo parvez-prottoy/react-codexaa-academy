@@ -1,10 +1,18 @@
 import mongoose from 'mongoose';
 
+const topicSchema = new mongoose.Schema(
+  {
+    title: { type: String, default: '' },
+    videoUrl: { type: String, default: '' },
+  },
+  { _id: false }
+);
+
 const curriculumSchema = new mongoose.Schema({
   id: String,
   title: String,
   duration: String,
-  topics: [String],
+  topics: [mongoose.Schema.Types.Mixed],
 });
 
 const featureSchema = new mongoose.Schema({

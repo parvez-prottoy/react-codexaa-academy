@@ -4,6 +4,43 @@ import { HiBookOpen, HiChevronDown, HiClock } from 'react-icons/hi2';
 import { useAuth } from '../../hooks/useAuth';
 import { useToast } from '../../hooks/useToast';
 
+// Helper to convert any YouTube URL/ID (watch, shorts, youtu.be, embed, or ID) into a clean embed URL with autoplay
+function formatVideoEmbedUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+  }
+  const trimmed = url.trim();
+  if (!trimmed) {
+    return 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+  }
+
+  // If already an embed URL
+  if (trimmed.includes('youtube.com/embed/')) {
+    if (trimmed.includes('?')) {
+      return trimmed.includes('autoplay') ? trimmed : `${trimmed}&autoplay=1`;
+    }
+    return `${trimmed}?autoplay=1`;
+  }
+
+  // Standard watch, shorts, or youtu.be URL
+  const match = trimmed.match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|v\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}?autoplay=1`;
+  }
+
+  // 11-char Video ID directly
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    return `https://www.youtube.com/embed/${trimmed}?autoplay=1`;
+  }
+
+  // Generic fallback: preserve external embed URL or wrap
+  return trimmed.startsWith('http')
+    ? trimmed
+    : `https://www.youtube.com/embed/${trimmed}?autoplay=1`;
+}
+
 export default function CurriculumAccordion({
   curriculum = [],
   isEnrolled,
@@ -65,10 +102,11 @@ export default function CurriculumAccordion({
         typeof topic === 'string'
           ? topic
           : topic?.title || 'Lesson Video';
-      const videoUrl =
+      const rawVideoUrl =
         (typeof topic === 'object' && topic?.videoUrl) ||
         moduleItem?.videoUrl ||
-        'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+        '';
+      const videoUrl = formatVideoEmbedUrl(rawVideoUrl);
 
       setActiveLesson({
         title,
@@ -158,51 +196,57 @@ export default function CurriculumAccordion({
               {/* Module Topics List */}
               {isOpen && module.topics && (
                 <div className="p-4 sm:p-5 bg-white border-t border-slate-100 space-y-2.5 animate-fadeIn">
-                  {module.topics.map((topic, topicIdx) => (
-                    <div
-                      key={topicIdx}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => handleLessonClick(topic, module, topicIdx)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          handleLessonClick(topic, module, topicIdx);
-                        }
-                      }}
-                      className={`flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl border transition-all select-none ${
-                        hasAccess
-                          ? 'bg-slate-50/70 hover:bg-emerald-50/40 border-slate-100 hover:border-emerald-200/80 cursor-pointer group shadow-2xs hover:shadow-xs'
-                          : 'bg-slate-50/40 hover:bg-slate-100/60 border-transparent hover:border-slate-200/60 cursor-not-allowed group opacity-90'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div
-                          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
-                            hasAccess
-                              ? 'bg-emerald-100/70 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white'
-                              : 'bg-slate-100 text-slate-400'
-                          }`}
-                        >
-                          <Play
-                            size={13}
-                            className={`ml-0.5 ${
+                  {module.topics.map((topic, topicIdx) => {
+                    const topicTitle =
+                      typeof topic === 'string'
+                        ? topic
+                        : topic?.title || 'Lesson Video';
+
+                    return (
+                      <div
+                        key={topicIdx}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => handleLessonClick(topic, module, topicIdx)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleLessonClick(topic, module, topicIdx);
+                          }
+                        }}
+                        className={`flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl border transition-all select-none ${
+                          hasAccess
+                            ? 'bg-slate-50/70 hover:bg-emerald-50/40 border-slate-100 hover:border-emerald-200/80 cursor-pointer group shadow-2xs hover:shadow-xs'
+                            : 'bg-slate-50/40 hover:bg-slate-100/60 border-transparent hover:border-slate-200/60 cursor-not-allowed group opacity-90'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div
+                            className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                               hasAccess
-                                ? 'fill-current'
-                                : 'fill-slate-400/20 text-slate-400'
+                                ? 'bg-emerald-100/70 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white'
+                                : 'bg-slate-100 text-slate-400'
                             }`}
-                          />
+                          >
+                            <Play
+                              size={13}
+                              className={`ml-0.5 ${
+                                hasAccess
+                                  ? 'fill-current'
+                                  : 'fill-slate-400/20 text-slate-400'
+                              }`}
+                            />
+                          </div>
+                          <span
+                            className={`text-xs sm:text-sm font-medium transition-colors line-clamp-1 ${
+                              hasAccess
+                                ? 'text-slate-800 group-hover:text-slate-950 font-semibold'
+                                : 'text-slate-600 group-hover:text-slate-800'
+                            }`}
+                          >
+                            {topicTitle}
+                          </span>
                         </div>
-                        <span
-                          className={`text-xs sm:text-sm font-medium transition-colors line-clamp-1 ${
-                            hasAccess
-                              ? 'text-slate-800 group-hover:text-slate-950 font-semibold'
-                              : 'text-slate-600 group-hover:text-slate-800'
-                          }`}
-                        >
-                          {topic}
-                        </span>
-                      </div>
 
                       <div className="flex items-center shrink-0">
                         {hasAccess ? (
@@ -224,7 +268,8 @@ export default function CurriculumAccordion({
                         )}
                       </div>
                     </div>
-                  ))}
+                  );
+                })}
                 </div>
               )}
             </div>

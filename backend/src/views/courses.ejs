@@ -228,16 +228,39 @@
     if(window.lucide) lucide.createIcons();
   }
 
-  function addTopic(btnOrContainer, value = '') {
+  function addTopic(btnOrContainer, topicData = {}) {
     const container = btnOrContainer.classList && btnOrContainer.classList.contains('topics-container')
       ? btnOrContainer
       : btnOrContainer.closest('.col-span-2').querySelector('.topics-container');
     
+    let title = '';
+    let videoUrl = '';
+    if (typeof topicData === 'string') {
+      title = topicData;
+    } else if (topicData && typeof topicData === 'object') {
+      title = topicData.title || '';
+      videoUrl = topicData.videoUrl || '';
+    }
+
+    const safeTitle = (title || '').replace(/"/g, '&quot;');
+    const safeVideoUrl = (videoUrl || '').replace(/"/g, '&quot;');
+
     const div = document.createElement('div');
-    div.className = 'flex items-center gap-2 bg-white p-1.5 px-2 rounded-lg border border-slate-200 focus-within:border-brand-500 transition-colors';
+    div.className = 'topic-row flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white p-2 rounded-xl border border-slate-200 focus-within:border-brand-500 shadow-xs transition-colors group';
     div.innerHTML = `
-      <input type="text" class="curr-topic-input flex-1 bg-transparent text-sm focus:outline-none" placeholder="e.g. HTTP Protocol & Browser Rendering Cycle" value="${value}">
-      <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-red-500 p-1 transition-colors" title="Delete Topic"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      <div class="flex-1 flex items-center gap-2 min-w-0">
+        <span class="text-brand-500 text-xs shrink-0"><i data-lucide="play-circle" class="w-4 h-4"></i></span>
+        <input type="text" class="curr-topic-title flex-1 bg-transparent text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none" placeholder="Topic / Lesson Title (e.g. Install Tools)" value="${safeTitle}">
+      </div>
+      <div class="flex items-center gap-2 sm:w-[48%] shrink-0">
+        <div class="flex-1 flex items-center gap-1.5 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200 focus-within:border-brand-400">
+          <i data-lucide="video" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+          <input type="text" class="curr-topic-video flex-1 bg-transparent text-xs text-slate-700 placeholder:text-slate-400 focus:outline-none" placeholder="YouTube URL or Embed Link" value="${safeVideoUrl}">
+        </div>
+        <button type="button" onclick="this.closest('.topic-row').remove()" class="text-slate-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors shrink-0" title="Delete Topic">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+      </div>
     `;
     container.appendChild(div);
     if(window.lucide) lucide.createIcons();
@@ -382,11 +405,26 @@
     // Build Dynamic Arrays
     const loArray = Array.from(document.querySelectorAll('.lo-input')).map(inp => inp.value).filter(v => v.trim() !== '');
     
-    const currArray = Array.from(document.querySelectorAll('.curr-row')).map(row => ({
-      title: row.querySelector('.curr-title').value,
-      duration: row.querySelector('.curr-duration').value,
-      topics: Array.from(row.querySelectorAll('.curr-topic-input')).map(inp => inp.value.trim()).filter(t => t !== '')
-    })).filter(c => c.title.trim() !== '');
+    const currArray = Array.from(document.querySelectorAll('.curr-row')).map(row => {
+      const title = row.querySelector('.curr-title').value.trim();
+      const duration = row.querySelector('.curr-duration').value.trim();
+      const topicRows = Array.from(row.querySelectorAll('.topic-row'));
+      
+      const topics = topicRows.map(tr => {
+        const tTitle = (tr.querySelector('.curr-topic-title') || tr.querySelector('.curr-topic-input'))?.value.trim() || '';
+        const tVideo = tr.querySelector('.curr-topic-video')?.value.trim() || '';
+        return {
+          title: tTitle,
+          videoUrl: tVideo
+        };
+      }).filter(t => t.title !== '');
+
+      return {
+        title,
+        duration,
+        topics
+      };
+    }).filter(c => c.title !== '');
 
     const featArray = Array.from(document.querySelectorAll('.feat-row')).map(row => ({
       title: row.querySelector('.feat-title').value,
