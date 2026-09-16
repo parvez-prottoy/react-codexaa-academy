@@ -34,7 +34,9 @@ export default function Dashboard() {
     if (isPaymentSuccess && !hasNotifiedPaymentRef.current) {
       hasNotifiedPaymentRef.current = true;
       refreshUser();
-      toast.success('🎉 Congratulations! You have successfully enrolled in the course.');
+      toast.success(
+        '🎉 Congratulations! You have successfully enrolled in the course.'
+      );
       navigate('/dashboard', { replace: true });
     }
   }, [isPaymentSuccess, refreshUser, toast, navigate]);
@@ -65,9 +67,12 @@ export default function Dashboard() {
                 <HiCheckCircle size={28} className="text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-extrabold leading-tight">Payment Verified & Course Enrolled!</h2>
+                <h2 className="text-lg font-extrabold leading-tight">
+                  Payment Verified & Course Enrolled!
+                </h2>
                 <p className="text-xs sm:text-sm text-emerald-100 mt-0.5">
-                  Your SSLCommerz transaction was completed. Your course materials and curriculum are now unlocked.
+                  Your SSLCommerz transaction was completed. Your course
+                  materials and curriculum are now unlocked.
                 </p>
               </div>
             </div>
@@ -78,10 +83,14 @@ export default function Dashboard() {
         )}
 
         {/* Student Welcome Header Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 mt-12">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-linear-to-tr from-[#2470A8] to-[#5BAFE6] text-white flex items-center justify-center text-2xl font-black shadow-md shadow-blue-200 shrink-0">
-              {user.name ? user.name.charAt(0).toUpperCase() : <HiUser size={28} />}
+              {user.name ? (
+                user.name.charAt(0).toUpperCase()
+              ) : (
+                <HiUser size={28} />
+              )}
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -125,7 +134,8 @@ export default function Dashboard() {
                   You have not enrolled in any courses yet
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Choose from our industry-standard courses and accelerate your engineering career with hands-on projects.
+                  Choose from our industry-standard courses and accelerate your
+                  engineering career with hands-on projects.
                 </p>
               </div>
               <Link
@@ -141,10 +151,16 @@ export default function Dashboard() {
               {enrolledCourses.map((course) => {
                 const isObject = typeof course === 'object' && course !== null;
                 const courseId = isObject ? course._id || course.id : course;
-                const title = isObject ? course.title : 'Full-Stack Engineering Program';
-                const slug = isObject ? course.slug : 'complete-mern-stack-development-bootcamp';
+                const title = isObject
+                  ? course.title
+                  : 'Full-Stack Engineering Program';
+                const slug = isObject
+                  ? course.slug
+                  : 'complete-mern-stack-development-bootcamp';
                 const image = isObject ? course.image : null;
-                const instructor = isObject ? course.instructor : 'Lead Mentors';
+                const instructor = isObject
+                  ? course.instructor
+                  : 'Lead Mentors';
                 const duration = isObject ? course.duration : '24 Weeks';
                 const category = isObject ? course.category : 'Development';
 
