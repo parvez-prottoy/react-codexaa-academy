@@ -318,7 +318,11 @@ export default function CourseDetails() {
 
           {/* 4. Course Curriculum Accordion */}
           {course.curriculum && course.curriculum.length > 0 && (
-            <CurriculumAccordion curriculum={course.curriculum} />
+            <CurriculumAccordion
+              curriculum={course.curriculum}
+              isEnrolled={isAlreadyEnrolled}
+              courseId={course._id}
+            />
           )}
 
           {/* 5. Instructor Section */}

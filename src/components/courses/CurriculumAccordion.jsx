@@ -1,12 +1,51 @@
-import { Lock, Play } from 'lucide-react';
+import { Lock, Play, Unlock } from 'lucide-react';
 import { useState } from 'react';
 import { HiBookOpen, HiChevronDown, HiClock } from 'react-icons/hi2';
+import { useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../hooks/useToast';
 
-export default function CurriculumAccordion({ curriculum = [] }) {
+export default function CurriculumAccordion({
+  curriculum = [],
+  isEnrolled,
+  isUnlocked,
+  hasPurchased,
+  courseId,
+  onLessonClick,
+}) {
+  const { user } = useAuth();
+  const toast = useToast();
   const [openIndex, setOpenIndex] = useState(0);
+
+  // Determine enrollment / purchase access:
+  // 1. Explicit boolean prop (isUnlocked / isEnrolled / hasPurchased)
+  // 2. Or derived from logged-in user's enrolledCourses list
+  const hasAccess = Boolean(
+    isUnlocked ??
+      isEnrolled ??
+      hasPurchased ??
+      (courseId &&
+        user?.enrolledCourses?.some((c) => {
+          const id = typeof c === 'object' && c !== null ? c._id || c.id : c;
+          return id === courseId;
+        }))
+  );
 
   const toggleModule = (index) => {
     setOpenIndex(openIndex === index ? -1 : index);
+  };
+
+  const handleLessonClick = (topic, moduleItem, topicIdx) => {
+    if (hasAccess) {
+      if (typeof onLessonClick === 'function') {
+        onLessonClick(topic, moduleItem, topicIdx);
+      } else {
+        toast.success(`Opening lesson: "${topic}"`);
+      }
+    } else {
+      toast.info(
+        '🔒 This lesson is locked. Please enroll in the course to unlock full curriculum and video access.'
+      );
+    }
   };
 
   if (!curriculum || curriculum.length === 0) return null;
@@ -20,9 +59,18 @@ export default function CurriculumAccordion({ curriculum = [] }) {
             Course Curriculum
           </h2>
         </div>
-        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-[#2470A8] border border-blue-200/80 self-start sm:self-auto">
-          {curriculum.length} Modules • Hands-on Project Focused
-        </span>
+
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          {hasAccess && (
+            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 flex items-center gap-1.5 shadow-2xs">
+              <Unlock size={12} className="text-emerald-600" />
+              Full Access Unlocked
+            </span>
+          )}
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-[#2470A8] border border-blue-200/80">
+            {curriculum.length} Modules • Hands-on Project Focused
+          </span>
+        </div>
       </div>
 
       <div className="space-y-3">
@@ -79,29 +127,67 @@ export default function CurriculumAccordion({ curriculum = [] }) {
                   {module.topics.map((topic, topicIdx) => (
                     <div
                       key={topicIdx}
-                      className="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl bg-slate-50/60 hover:bg-slate-100/70 border border-transparent hover:border-slate-200/60 transition-all group"
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleLessonClick(topic, module, topicIdx)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleLessonClick(topic, module, topicIdx);
+                        }
+                      }}
+                      className={`flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-xl border transition-all select-none ${
+                        hasAccess
+                          ? 'bg-slate-50/70 hover:bg-emerald-50/40 border-slate-100 hover:border-emerald-200/80 cursor-pointer group shadow-2xs hover:shadow-xs'
+                          : 'bg-slate-50/40 hover:bg-slate-100/60 border-transparent hover:border-slate-200/60 cursor-not-allowed group opacity-90'
+                      }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#2470A8] flex items-center justify-center shrink-0">
+                        <div
+                          className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                            hasAccess
+                              ? 'bg-emerald-100/70 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white'
+                              : 'bg-slate-100 text-slate-400'
+                          }`}
+                        >
                           <Play
                             size={13}
-                            className="fill-[#2470A8]/20 text-[#2470A8] ml-0.5"
+                            className={`ml-0.5 ${
+                              hasAccess
+                                ? 'fill-current'
+                                : 'fill-slate-400/20 text-slate-400'
+                            }`}
                           />
                         </div>
-                        <span className="text-xs sm:text-sm text-slate-700 font-medium group-hover:text-slate-900 transition-colors">
+                        <span
+                          className={`text-xs sm:text-sm font-medium transition-colors line-clamp-1 ${
+                            hasAccess
+                              ? 'text-slate-800 group-hover:text-slate-950 font-semibold'
+                              : 'text-slate-600 group-hover:text-slate-800'
+                          }`}
+                        >
                           {topic}
                         </span>
                       </div>
 
                       <div className="flex items-center shrink-0">
-                        <button
-                          type="button"
-                          className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:text-slate-600 hover:bg-slate-200/60 transition-colors"
-                          aria-label="Locked lesson"
-                          title="Locked lesson"
-                        >
-                          <Lock size={14} />
-                        </button>
+                        {hasAccess ? (
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-emerald-600 bg-emerald-50 border border-emerald-200/80 group-hover:bg-emerald-100 transition-colors"
+                            aria-label="Unlocked lesson"
+                            title="Lesson unlocked - Ready to play"
+                          >
+                            <Unlock size={14} />
+                          </div>
+                        ) : (
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center text-rose-500 bg-rose-50/80 border border-rose-200/60 transition-colors"
+                            aria-label="Locked lesson"
+                            title="Locked lesson - Enrollment required"
+                          >
+                            <Lock size={14} />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
