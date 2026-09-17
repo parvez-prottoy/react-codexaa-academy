@@ -7,6 +7,7 @@ import { ToastProvider } from './context/ToastContext';
 import About from './pages/About';
 import Blog from './pages/Blog';
 import BlogDetails from './pages/BlogDetails';
+import CertificateDemo from './pages/CertificateDemo';
 import Contact from './pages/Contact';
 import CourseDetails from './pages/CourseDetails';
 import Courses from './pages/Courses';
@@ -41,6 +42,8 @@ export default function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/certificate-demo" element={<CertificateDemo />} />
+                <Route path="/certificate" element={<CertificateDemo />} />
               </Routes>
             </main>
 

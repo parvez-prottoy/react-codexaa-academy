@@ -10,6 +10,7 @@ import {
 } from 'react-icons/hi2';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import SEO from '../components/common/SEO';
+import CertificateModal from '../components/certificate/CertificateModal';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
 import { optimizeImage } from '../utils/optimizeImage';
@@ -19,6 +20,9 @@ export default function Dashboard() {
   const [searchParams] = useSearchParams();
   const toast = useToast();
   const navigate = useNavigate();
+
+  const [isCertOpen, setIsCertOpen] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null);
 
   const isPaymentSuccess = searchParams.get('payment') === 'success';
   const [showSuccessBanner] = useState(isPaymentSuccess);
@@ -102,7 +106,13 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 self-start md:self-auto">
+          <div className="flex items-center gap-3 self-start md:self-auto flex-wrap">
+            <Link
+              to="/certificate-demo"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-xs sm:text-sm font-bold transition-colors"
+            >
+              <span>🎓 Certificate (Demo)</span>
+            </Link>
             <Link
               to="/courses"
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold transition-colors"
@@ -205,7 +215,7 @@ export default function Dashboard() {
                         </h3>
                       </div>
 
-                      <div className="pt-2 border-t border-slate-100">
+                      <div className="pt-2 border-t border-slate-100 space-y-2">
                         <Link
                           to={`/course/${slug}`}
                           className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-50 text-[#2470A8] hover:bg-[#2470A8] hover:text-white font-bold text-xs transition-colors"
@@ -213,6 +223,25 @@ export default function Dashboard() {
                           <span>Go to Curriculum & Classes</span>
                           <HiArrowRight size={14} />
                         </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedCert({
+                              studentName: user.name || 'Student',
+                              courseName: title,
+                              completionDate: 'September 17, 2026',
+                              certificateId: `CERT-2026-${String(courseId).slice(-4).toUpperCase()}`,
+                              mentorName: 'Md. Israfil Rana',
+                              mentorOrg: 'CodexAA Academy',
+                              mentorRole: 'Lead Software Engineering Mentors',
+                            });
+                            setIsCertOpen(true);
+                          }}
+                          className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-amber-50/90 hover:bg-amber-100 text-amber-900 font-bold text-xs border border-amber-200/80 transition-colors cursor-pointer"
+                        >
+                          <span>🎓 View Certificate</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -222,6 +251,15 @@ export default function Dashboard() {
           )}
         </div>
       </div>
+
+      {/* Certificate Modal */}
+      {selectedCert && (
+        <CertificateModal
+          isOpen={isCertOpen}
+          onClose={() => setIsCertOpen(false)}
+          initialData={selectedCert}
+        />
+      )}
     </div>
   );
 }
