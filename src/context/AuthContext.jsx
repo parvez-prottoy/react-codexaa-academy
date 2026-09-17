@@ -4,26 +4,16 @@ import { AuthContext } from './auth-context';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem('codexaa_token'));
   const [loading, setLoading] = useState(true);
 
   // Re-fetch current user profile & enrolled courses
   const refreshUser = useCallback(async () => {
-    const savedToken = localStorage.getItem('codexaa_token');
-    if (!savedToken) {
-      setUser(null);
-      setLoading(false);
-      return null;
-    }
-
     try {
       const res = await api.get('/auth/me');
       setUser(res.data);
       return res.data;
     } catch (err) {
-      console.warn('Session verification failed, logging out:', err.response?.data?.message || err.message);
-      localStorage.removeItem('codexaa_token');
-      setToken(null);
+      console.warn('Session verification failed:', err.response?.data?.message || err.message);
       setUser(null);
       return null;
     } finally {
@@ -31,27 +21,17 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  // Check auth session on application mount asynchronously
+  // Check auth session on application mount via secure HTTP-only cookie
   useEffect(() => {
     let isMounted = true;
 
     const initAuth = async () => {
-      const savedToken = localStorage.getItem('codexaa_token');
-      if (!savedToken) {
-        if (isMounted) setLoading(false);
-        return;
-      }
-
       try {
         const res = await api.get('/auth/me');
         if (isMounted) setUser(res.data);
-      } catch (err) {
-        console.warn('Session verification failed:', err.response?.data?.message || err.message);
-        localStorage.removeItem('codexaa_token');
-        if (isMounted) {
-          setToken(null);
-          setUser(null);
-        }
+      } catch {
+        // User is not logged in or cookie expired
+        if (isMounted) setUser(null);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -67,12 +47,7 @@ export function AuthProvider({ children }) {
   // Login handler
   const login = useCallback(async (email, password) => {
     const res = await api.post('/auth/login', { email, password });
-    const { token: authToken, ...userData } = res.data;
-
-    localStorage.setItem('codexaa_token', authToken);
-    setToken(authToken);
-    setUser(userData);
-
+    setUser(res.data);
     return res.data;
   }, []);
 
@@ -83,27 +58,26 @@ export function AuthProvider({ children }) {
       email,
       password,
     });
-    const { token: authToken, ...userData } = res.data;
-
-    localStorage.setItem('codexaa_token', authToken);
-    setToken(authToken);
-    setUser(userData);
-
+    setUser(res.data);
     return res.data;
   }, []);
 
   // Logout handler
-  const logout = useCallback(() => {
-    localStorage.removeItem('codexaa_token');
-    setToken(null);
-    setUser(null);
+  const logout = useCallback(async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (err) {
+      console.warn('Logout notification error:', err.response?.data?.message || err.message);
+    } finally {
+      setUser(null);
+    }
   }, []);
 
   const value = {
     user,
-    token,
+    token: null, // Maintained for backward compatibility; actual token resides in HTTP-only cookie
     loading,
-    isAuthenticated: Boolean(user && token),
+    isAuthenticated: Boolean(user),
     login,
     register,
     logout,

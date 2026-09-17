@@ -1,7 +1,36 @@
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 
-// @desc    Auth user & get token
+const getCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    path: '/',
+  };
+};
+
+const sendTokenResponse = (user, statusCode, res) => {
+  const token = generateToken(user._id);
+  const cookieOptions = getCookieOptions();
+
+  // Set secure HTTP-only cookie
+  res.cookie('auth_token', token, cookieOptions);
+  res.cookie('token', token, cookieOptions);
+
+  // Return user credentials WITHOUT exposing token to client-side JavaScript
+  res.status(statusCode).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    enrolledCourses: user.enrolledCourses || [],
+  });
+};
+
+// @desc    Auth user & set HTTP-only cookie
 // @route   POST /api/v1/auth/login
 // @access  Public
 export const authUser = async (req, res, next) => {
@@ -16,14 +45,7 @@ export const authUser = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        enrolledCourses: user.enrolledCourses || [],
-        token: generateToken(user._id),
-      });
+      sendTokenResponse(user, 200, res);
     } else {
       res.status(401);
       throw new Error('Invalid email or password');
@@ -33,7 +55,7 @@ export const authUser = async (req, res, next) => {
   }
 };
 
-// @desc    Register a new user
+// @desc    Register a new user & set HTTP-only cookie
 // @route   POST /api/v1/auth/register
 // @access  Public
 export const registerUser = async (req, res, next) => {
@@ -63,18 +85,33 @@ export const registerUser = async (req, res, next) => {
     });
 
     if (user) {
-      res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        enrolledCourses: user.enrolledCourses,
-        token: generateToken(user._id),
-      });
+      sendTokenResponse(user, 201, res);
     } else {
       res.status(400);
       throw new Error('Invalid user data');
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Logout user & clear HTTP-only auth cookies
+// @route   POST /api/v1/auth/logout
+// @access  Public
+export const logoutUser = async (req, res, next) => {
+  try {
+    const isProduction = process.env.NODE_ENV === 'production';
+    const clearOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
+    };
+
+    res.clearCookie('auth_token', clearOptions);
+    res.clearCookie('token', clearOptions);
+
+    res.json({ success: true, message: 'Logged out successfully' });
   } catch (error) {
     next(error);
   }
