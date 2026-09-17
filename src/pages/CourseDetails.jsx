@@ -14,7 +14,6 @@ import CourseOverview from '../components/courses/CourseOverview';
 import CurriculumAccordion from '../components/courses/CurriculumAccordion';
 import FAQSection from '../components/courses/FAQSection';
 import InstructorCard from '../components/courses/InstructorCard';
-import LearningOutcomes from '../components/courses/LearningOutcomes';
 import SEO from '../components/common/SEO';
 import { optimizeImage } from '../utils/optimizeImage';
 import useFetch from '../hooks/useFetch';
@@ -308,13 +307,8 @@ export default function CourseDetails() {
       {/* Main Content Layout */}
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          {/* 2. Course Overview */}
+          {/* 2. Course Overview & What You Will Learn (Combined Section) */}
           <CourseOverview course={course} />
-
-          {/* 3. What You Will Learn */}
-          {course.learningOutcomes && course.learningOutcomes.length > 0 && (
-            <LearningOutcomes outcomes={course.learningOutcomes} />
-          )}
 
           {/* 4. Course Curriculum Accordion */}
           {course.curriculum && course.curriculum.length > 0 && (
