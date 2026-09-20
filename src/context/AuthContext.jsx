@@ -13,7 +13,10 @@ export function AuthProvider({ children }) {
       setUser(res.data);
       return res.data;
     } catch (err) {
-      console.warn('Session verification failed:', err.response?.data?.message || err.message);
+      console.warn(
+        'Session verification failed:',
+        err.response?.data?.message || err.message
+      );
       setUser(null);
       return null;
     } finally {
@@ -67,7 +70,10 @@ export function AuthProvider({ children }) {
     try {
       await api.post('/auth/logout');
     } catch (err) {
-      console.warn('Logout notification error:', err.response?.data?.message || err.message);
+      console.warn(
+        'Logout notification error:',
+        err.response?.data?.message || err.message
+      );
     } finally {
       setUser(null);
     }

@@ -9,8 +9,8 @@ import {
   HiUser,
 } from 'react-icons/hi2';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import SEO from '../components/common/SEO';
 import CertificateModal from '../components/certificate/CertificateModal';
+import SEO from '../components/common/SEO';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
 import { optimizeImage } from '../utils/optimizeImage';
@@ -56,7 +56,7 @@ export default function Dashboard() {
   const enrolledCourses = user.enrolledCourses || [];
 
   return (
-    <div className="pt-24 pb-20 min-h-screen bg-slate-50">
+    <div className="pt-24 pb-20 min-h-screen bg-slate-50 mt-12">
       <SEO
         title="Student Dashboard | Codexaa Academy"
         description="Access your enrolled courses, syllabus progress, and live student community."
