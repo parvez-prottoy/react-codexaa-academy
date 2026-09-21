@@ -1,20 +1,40 @@
-import { Link } from "react-router-dom";
 import {
-  HiCodeBracket,
-  HiGlobeAlt,
-  HiCpuChip,
-  HiSwatch,
   HiCloud,
+  HiCodeBracket,
+  HiCpuChip,
+  HiGlobeAlt,
   HiServer,
-} from "react-icons/hi2";
+  HiSwatch,
+} from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
 
 const iconMap = {
-  "web-development": { icon: HiGlobeAlt, color: "text-blue-600", bg: "bg-blue-50" },
-  "frontend-react": { icon: HiCodeBracket, color: "text-indigo-600", bg: "bg-indigo-50" },
-  "backend-nodejs": { icon: HiServer, color: "text-violet-600", bg: "bg-violet-50" },
-  "ui-ux-design": { icon: HiSwatch, color: "text-pink-600", bg: "bg-pink-50" },
-  "ai-machine-learning": { icon: HiCpuChip, color: "text-[#3695d0]", bg: "bg-sky-50" },
-  "devops-essentials": { icon: HiCloud, color: "text-emerald-600", bg: "bg-emerald-50" },
+  'web-development': {
+    icon: HiGlobeAlt,
+    color: 'text-blue-600',
+    bg: 'bg-blue-50',
+  },
+  'frontend-react': {
+    icon: HiCodeBracket,
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50',
+  },
+  'backend-nodejs': {
+    icon: HiServer,
+    color: 'text-violet-600',
+    bg: 'bg-violet-50',
+  },
+  'ui-ux-design': { icon: HiSwatch, color: 'text-pink-600', bg: 'bg-pink-50' },
+  'ai-machine-learning': {
+    icon: HiCpuChip,
+    color: 'text-[#3695d0]',
+    bg: 'bg-sky-50',
+  },
+  'devops-essentials': {
+    icon: HiCloud,
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+  },
 };
 
 export default function CourseMenuItem({ course, onClick, compact = false }) {
@@ -23,8 +43,8 @@ export default function CourseMenuItem({ course, onClick, compact = false }) {
   const targetPath = course.slug ? `/course/${course.slug}` : `/courses`;
   const meta = iconMap[course.id] || {
     icon: HiCodeBracket,
-    color: "text-blue-600",
-    bg: "bg-blue-50",
+    color: 'text-blue-600',
+    bg: 'bg-blue-50',
   };
   const Icon = course.icon || meta.icon;
   const iconColor = course.color || meta.color;
@@ -36,9 +56,9 @@ export default function CourseMenuItem({ course, onClick, compact = false }) {
       onClick={onClick}
       role="menuitem"
       className="
-        group flex items-center gap-3 rounded-xl p-2.5 sm:p-3
-        transition-all duration-200
-        hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+        group flex items-center gap-3 rounded-xl p-2.5 sm:p-4
+        transition-all duration-200 bg-slate-50
+        hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
       "
     >
       <div
@@ -57,7 +77,7 @@ export default function CourseMenuItem({ course, onClick, compact = false }) {
         </p>
         {!compact && (course.category || course.shortDescription) && (
           <p className="text-[11px] text-slate-500 mt-0.5 leading-snug truncate">
-            {course.category} • {course.duration || "Self-Paced"}
+            {course.category} • {course.duration || 'Self-Paced'}
           </p>
         )}
       </div>

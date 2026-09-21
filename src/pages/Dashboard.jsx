@@ -87,7 +87,7 @@ export default function Dashboard() {
         )}
 
         {/* Student Welcome Header Card */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 mt-12">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-linear-to-tr from-[#2470A8] to-[#5BAFE6] text-white flex items-center justify-center text-2xl font-black shadow-md shadow-blue-200 shrink-0">
               {user.name ? (

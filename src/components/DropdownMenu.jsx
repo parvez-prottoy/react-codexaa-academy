@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { HiArrowRight } from "react-icons/hi2";
-import { courseData as staticCourseData } from "../data/courseData";
-import CourseMenuItem from "./CourseMenuItem";
-import useFetch from "../hooks/useFetch";
+import { useEffect, useRef } from 'react';
+import { HiArrowRight } from 'react-icons/hi2';
+import { Link } from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
+import CourseMenuItem from './CourseMenuItem';
 
 export default function DropdownMenu({
   isOpen,
@@ -20,21 +19,21 @@ export default function DropdownMenu({
         onClose();
       }
     }
-    if (isOpen) document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    if (isOpen) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, [isOpen, onClose]);
 
   /* Close on Escape */
   useEffect(() => {
     function handleKey(e) {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     }
-    if (isOpen) document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
+    if (isOpen) document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose]);
 
   // Fetch courses dynamically from backend
-  const { data: apiCourses, loading } = useFetch("/courses");
+  const { data: apiCourses, loading } = useFetch('/courses');
 
   return (
     <div
@@ -47,7 +46,7 @@ export default function DropdownMenu({
       className={`
         absolute top-full left-1/2 -translate-x-1/2 pt-2
         w-170 max-w-[calc(100vw-2rem)] z-50
-        ${isOpen ? "pointer-events-auto" : "pointer-events-none"}
+        ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}
       `}
     >
       {/* Invisible static hover bridge anchored to top-0 — never shifts during animation */}
@@ -64,8 +63,8 @@ export default function DropdownMenu({
           transition-all duration-300 ease-out origin-top overflow-hidden
           ${
             isOpen
-              ? "opacity-100 scale-100 translate-y-0"
-              : "opacity-0 scale-95 -translate-y-2"
+              ? 'opacity-100 scale-100 translate-y-0'
+              : 'opacity-0 scale-95 -translate-y-2'
           }
         `}
       >
@@ -74,9 +73,6 @@ export default function DropdownMenu({
           <p className="text-xs font-bold uppercase tracking-widest text-[#2470A8] mb-0.5">
             Programs & Bootcamps
           </p>
-          <p className="text-slate-500 text-xs sm:text-sm font-normal">
-            Industry-aligned tracks designed with top software employers
-          </p>
         </div>
 
         {/* Grid */}
@@ -84,7 +80,10 @@ export default function DropdownMenu({
           {loading ? (
             // Skeleton Loader
             [1, 2, 3, 4].map((n) => (
-              <div key={n} className="flex items-center gap-3 p-3 animate-pulse">
+              <div
+                key={n}
+                className="flex items-center gap-3 p-3 animate-pulse"
+              >
                 <div className="w-9 h-9 rounded-lg bg-slate-100 shrink-0"></div>
                 <div className="flex-1 space-y-2">
                   <div className="h-3 bg-slate-100 rounded w-3/4"></div>
@@ -94,9 +93,15 @@ export default function DropdownMenu({
             ))
           ) : apiCourses && apiCourses.length > 0 ? (
             // Render dynamic backend courses
-            apiCourses.slice(0, 6).map((course) => (
-              <CourseMenuItem key={course._id} course={course} onClick={onClose} />
-            ))
+            apiCourses
+              .slice(0, 6)
+              .map((course) => (
+                <CourseMenuItem
+                  key={course._id}
+                  course={course}
+                  onClick={onClose}
+                />
+              ))
           ) : (
             // No courses found
             <div className="col-span-2 py-6 text-center text-slate-400 text-sm">
